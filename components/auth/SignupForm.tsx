@@ -61,10 +61,10 @@ export function SignupForm() {
           document.cookie = `user-role=${
             response.data.user.role
           }; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
-        }
 
-        // Redirect to dashboard or login
-        router.push("/dashboard");
+          // Use window.location for full page reload to ensure cookies are properly set
+          window.location.href = "/dashboard";
+        }
       }
     } catch (error) {
       console.error("Signup error:", error);

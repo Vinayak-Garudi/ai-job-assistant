@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 import { Button } from "@/components/ui/button";
 import { redirect, RedirectType } from "next/navigation";
 import { handleAuthLogout } from "@/lib/authHandler";
-import { ThemeSwitcher } from "./theme-switcher";
-import { Briefcase, LayoutDashboard, Plus, User } from "lucide-react";
+// import { ThemeSwitcher } from "./theme-switcher";
+import { LayoutDashboard, Plus, User } from "lucide-react";
 
 export default async function Navigation() {
   // Check if user is authenticated
@@ -48,14 +48,14 @@ export default async function Navigation() {
                     Profile
                   </Button>
                 </Link>
-                <ThemeSwitcher />
+                {/* <ThemeSwitcher /> */}
                 <Button variant="outline" onClick={handleLogout}>
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <ThemeSwitcher />
+                {/* <ThemeSwitcher /> */}
                 <Link href="/auth/login">
                   <Button variant="ghost">Login</Button>
                 </Link>

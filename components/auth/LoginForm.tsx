@@ -49,10 +49,10 @@ export function LoginForm() {
           );
           document.cookie = `user-token=${response.data.token}; path=/; max-age=${maxAge}`;
           document.cookie = `user-role=${response.data.user.role}; path=/; max-age=${maxAge}`;
-        }
 
-        // Redirect to dashboard
-        router.push("/dashboard");
+          // Use window.location for full page reload to ensure cookies are properly set
+          window.location.href = "/dashboard";
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
