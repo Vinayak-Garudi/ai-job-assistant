@@ -1,9 +1,15 @@
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { getUserProfile } from "./actions";
+import { redirect } from "next/navigation";
 
 export default async function ProfilePage() {
   // Fetch user profile from server
   const profile = await getUserProfile();
+
+  // If no profile found (user not authenticated), redirect to login
+  if (!profile) {
+    redirect("/auth/login");
+  }
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-6xl">

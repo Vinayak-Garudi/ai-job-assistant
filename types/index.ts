@@ -34,7 +34,7 @@ export interface JobAnalysis {
 
 // User Profile Types
 export interface UserProfile {
-  id: string;
+  _id: string;
   basicInfo: BasicInfo;
   professionalInfo: ProfessionalInfo;
   otherInfo: OtherInfo;

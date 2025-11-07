@@ -1,112 +1,80 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import type { UserProfile } from "@/types";
+import { apiRequest } from "@/lib/api";
 
-// Mock function to save profile data
-// In production, this would save to a database
-export async function saveProfile(profile: UserProfile) {
+// Fetch user profile from API
+export async function getUserProfile(): Promise<UserProfile | null> {
   try {
-    // TODO: Save to database
-    console.log("Saving profile:", profile);
+    const cookieStore = await cookies();
+    const token = cookieStore.get("user-token")?.value;
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    if (!token) {
+      console.error("No authentication token found");
+      return null;
+    }
 
-    // Revalidate the profile page to show updated data
-    revalidatePath("/profile");
+    const response = await apiRequest("auth/profile", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    return { success: true, message: "Profile updated successfully" };
+    if (response.success && response.data) {
+      // Convert date strings to Date objects if needed
+      if (response.data.documents?.resume?.uploadedAt) {
+        response.data.documents.resume.uploadedAt = new Date(
+          response.data.documents.resume.uploadedAt
+        );
+      }
+      return response.data as UserProfile;
+    }
+
+    console.error("Failed to fetch profile:", response.message);
+    return null;
   } catch (error) {
-    console.error("Error saving profile:", error);
-    return { success: false, message: "Failed to save profile" };
+    console.error("Error fetching user profile:", error);
+    return null;
   }
 }
 
-// Mock function to fetch user profile
-// In production, this would fetch from a database
-export async function getUserProfile(): Promise<UserProfile> {
-  // TODO: Fetch from database based on authenticated user
-
-  // Return mock data for now
-  return {
-    id: "1",
-    basicInfo: {
-      username: "johndoe",
-      age: 28,
-      location: "San Francisco, CA",
-      email: "john.doe@example.com",
-      profilePic: "",
-    },
-    professionalInfo: {
-      currentTitle: "Senior Software Engineer",
-      currentCompany: "Tech Corp",
-      experienceYears: 5,
-      industry: "Technology",
-    },
-    otherInfo: {
-      skills: ["React", "TypeScript", "Node.js", "Python", "PostgreSQL"],
-      hobbiesAndInterests: ["Open Source", "Photography", "Hiking"],
-      softSkills: [
-        "Leadership",
-        "Communication",
-        "Problem Solving",
-        "Team Collaboration",
-      ],
-    },
-    education: {
-      degree: "Bachelor of Science in Computer Science",
-      graduationYear: 2019,
-      certifications: ["AWS Certified Developer", "Google Cloud Professional"],
-      university: "Stanford University",
-    },
-    documents: {
-      resume: {
-        url: "/resumes/john-doe-resume.pdf",
-        fileName: "john-doe-resume.pdf",
-        uploadedAt: new Date("2024-10-01"),
-      },
-    },
-    jobPreferences: {
-      jobTypes: ["Full Time", "Contract"],
-      workModes: ["Remote", "Hybrid"],
-      preferredLocations: ["San Francisco, CA", "New York, NY", "Remote"],
-      desiredRoles: [
-        "Software Engineer",
-        "Senior Software Engineer",
-        "Tech Lead",
-      ],
-    },
-  };
-}
-
-export async function uploadResume(formData: FormData) {
+// Save profile data to API
+export async function saveProfile(profile: UserProfile) {
   try {
-    const file = formData.get("resume") as File;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("user-token")?.value;
 
-    if (!file) {
-      return { success: false, message: "No file provided" };
+    if (!token) {
+      return { success: false, message: "Authentication required" };
     }
 
-    // TODO: Upload to storage service (S3, Cloudinary, etc.)
-    console.log("Uploading resume:", file.name);
+    const response = await apiRequest("/auth/profile", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(profile),
+    });
 
-    // Simulate upload
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    revalidatePath("/profile");
+    if (response.success) {
+      // Revalidate the profile page to show updated data
+      revalidatePath("/profile");
+      return {
+        success: true,
+        message: response.message || "Profile updated successfully",
+      };
+    }
 
     return {
-      success: true,
-      message: "Resume uploaded successfully",
-      data: {
-        url: `/resumes/${file.name}`,
-        fileName: file.name,
-        uploadedAt: new Date(),
-      },
+      success: false,
+      message: response.message || "Failed to update profile",
     };
   } catch (error) {
-    console.error("Error uploading resume:", error);
-    return { success: false, message: "Failed to upload resume" };
+    console.error("Error saving profile:", error);
+    return { success: false, message: "Failed to save profile" };
   }
 }

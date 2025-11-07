@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -9,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
@@ -23,52 +23,8 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  className="w-4 h-4 rounded border-gray-300"
-                />
-                <label htmlFor="remember" className="text-sm">
-                  Remember me
-                </label>
-              </div>
-              <Link
-                href="/auth/forgot-password"
-                className="text-sm text-blue-600 hover:underline dark:text-blue-400"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <Button type="submit" className="w-full">
-              Sign In
-            </Button>
-          </form>
-          <div className="relative my-6">
+          <LoginForm />
+          {/* <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t"></div>
             </div>
@@ -108,7 +64,7 @@ export default function LoginPage() {
               </svg>
               GitHub
             </Button>
-          </div>
+          </div> */}
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">

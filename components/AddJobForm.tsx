@@ -10,12 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { apiRequest } from "@/lib/api";
 
-interface AddJobFormProps {
-  onSubmit: (data: { url?: string; description?: string }) => void;
-}
-
-export default function AddJobForm({ onSubmit }: AddJobFormProps) {
+export default function AddJobForm() {
   const [mode, setMode] = useState<"url" | "manual">("url");
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -23,13 +20,28 @@ export default function AddJobForm({ onSubmit }: AddJobFormProps) {
   const [company, setCompany] = useState("");
   const [location, setLocation] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting job with mode:", mode, url);
     if (mode === "url") {
-      onSubmit({ url });
+      // Handle URL submission
+      console.log("Job URL:", url);
+
+      const response = await apiRequest("job-match/analyze-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+      console.log("API Response:", response);
     } else {
-      onSubmit({
-        description: `Title: ${title}\nCompany: ${company}\nLocation: ${location}\n\n${description}`,
+      // Handle manual submission
+      console.log("Job Details:", {
+        title,
+        company,
+        location,
+        description,
       });
     }
     // Reset form
@@ -43,7 +55,7 @@ export default function AddJobForm({ onSubmit }: AddJobFormProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Add New Job</CardTitle>
+        <CardTitle>Enter Job Details</CardTitle>
         <CardDescription>
           Add a job by URL or manually enter job details
         </CardDescription>
@@ -148,7 +160,7 @@ export default function AddJobForm({ onSubmit }: AddJobFormProps) {
           )}
 
           <Button type="submit" className="w-full">
-            Add Job & Analyze with AI
+            Analyze with AI
           </Button>
         </form>
       </CardContent>

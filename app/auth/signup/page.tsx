@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -9,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SignupForm } from "@/components/auth/SignupForm";
 
 export default function SignupPage() {
   return (
@@ -23,75 +23,8 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="username" className="text-sm font-medium">
-                Username
-              </label>
-              <Input id="username" type="text" placeholder="johndoe" required />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="confirm-password" className="text-sm font-medium">
-                Confirm Password
-              </label>
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="terms"
-                className="w-4 h-4 rounded border-gray-300"
-                required
-              />
-              <label htmlFor="terms" className="text-sm">
-                I agree to the{" "}
-                <Link
-                  href="/terms"
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/privacy"
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  Privacy Policy
-                </Link>
-              </label>
-            </div>
-            <Button type="submit" className="w-full">
-              Create Account
-            </Button>
-          </form>
-          <div className="relative my-6">
+          <SignupForm />
+          {/* <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t"></div>
             </div>
@@ -131,7 +64,7 @@ export default function SignupPage() {
               </svg>
               GitHub
             </Button>
-          </div>
+          </div> */}
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
