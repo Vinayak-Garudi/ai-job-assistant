@@ -52,7 +52,7 @@ export function LoginForm() {
         }
 
         // Redirect to dashboard
-        router.push("/jobs/add");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Login error:", error);

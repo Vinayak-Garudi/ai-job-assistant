@@ -64,7 +64,7 @@ export function SignupForm() {
         }
 
         // Redirect to dashboard or login
-        router.push("/jobs/add");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Signup error:", error);
