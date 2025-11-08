@@ -22,7 +22,7 @@ export function BasicInfoEditor({
       <div className="space-y-2">
         <label className="text-sm font-medium">Username</label>
         <Input
-          value={profile.basicInfo.username}
+          value={profile.basicInfo.username || ""}
           disabled={!isEditing}
           onChange={(e) => onUpdate("username", e.target.value)}
         />
@@ -31,8 +31,10 @@ export function BasicInfoEditor({
         <label className="text-sm font-medium">Age</label>
         <Input
           type="number"
-          value={profile.basicInfo.age}
+          value={profile.basicInfo.age || ""}
           disabled={!isEditing}
+          min={0}
+          max={120}
           onChange={(e) => onUpdate("age", parseInt(e.target.value) || 0)}
         />
       </div>
@@ -40,7 +42,7 @@ export function BasicInfoEditor({
         <label className="text-sm font-medium">Email</label>
         <Input
           type="email"
-          value={profile.basicInfo.email}
+          value={profile.basicInfo.email || ""}
           disabled={!isEditing}
           onChange={(e) => onUpdate("email", e.target.value)}
         />
@@ -48,7 +50,7 @@ export function BasicInfoEditor({
       <div className="space-y-2">
         <label className="text-sm font-medium">Location</label>
         <Input
-          value={profile.basicInfo.location}
+          value={profile.basicInfo.location || ""}
           disabled={!isEditing}
           onChange={(e) => onUpdate("location", e.target.value)}
         />

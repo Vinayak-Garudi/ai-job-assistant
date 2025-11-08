@@ -51,7 +51,7 @@ export async function saveProfile(profile: UserProfile) {
       return { success: false, message: "Authentication required" };
     }
 
-    const response = await apiRequest("/auth/profile", {
+    const response = await apiRequest("auth/profile", {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
