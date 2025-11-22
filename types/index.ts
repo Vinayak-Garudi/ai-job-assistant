@@ -48,7 +48,6 @@ export interface BasicInfo {
   age: number;
   location: string;
   email: string;
-  profilePic?: string;
 }
 
 export interface ProfessionalInfo {
