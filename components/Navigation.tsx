@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { redirect, RedirectType } from "next/navigation";
 import { handleAuthLogout } from "@/lib/authHandler";
 // import { ThemeSwitcher } from "./theme-switcher";
-import { LayoutDashboard, Plus, User } from "lucide-react";
+import { Sparkles, User, Plus } from "lucide-react";
 
 export default async function Navigation() {
   // Check if user is authenticated
@@ -22,12 +22,14 @@ export default async function Navigation() {
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🤖</span>
-            <span className="font-bold text-lg">AI Job Assistant</span>
-          </Link>
+          {!isAuthenticated && (
+            <Link href="/" className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <span className="font-bold text-lg">AI Job Assistant</span>
+            </Link>
+          )}
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 absolute right-4">
             {isAuthenticated ? (
               <>
                 {/* <Link href="/dashboard">
@@ -56,9 +58,9 @@ export default async function Navigation() {
             ) : (
               <>
                 {/* <ThemeSwitcher /> */}
-                <Link href="/auth/login">
+                {/* <Link href="/auth/login">
                   <Button variant="ghost">Login</Button>
-                </Link>
+                </Link> */}
                 <Link href="/auth/signup">
                   <Button>Get Started</Button>
                 </Link>

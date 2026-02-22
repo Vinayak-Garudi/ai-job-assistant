@@ -7,15 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Brain,
-  Briefcase,
-  FileText,
-  TrendingUp,
-  Target,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { Brain, TrendingUp, Target, Sparkles, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -85,32 +77,6 @@ export default function Home() {
 
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="h-12 w-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <CardTitle>Personalized Cover Letters</CardTitle>
-                <CardDescription>
-                  Generate tailored cover letters and email drafts for each
-                  application based on your profile and the job requirements.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="h-12 w-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
-                  <Briefcase className="h-6 w-6 text-green-600 dark:text-green-400" />
-                </div>
-                <CardTitle>Application Tracking</CardTitle>
-                <CardDescription>
-                  Keep track of all your job applications in one place with
-                  notes, status updates, and interview schedules.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
                 <div className="h-12 w-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-4">
                   <Target className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                 </div>
@@ -147,55 +113,6 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="bg-muted py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              How It Works
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Three simple steps to supercharge your job search
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center space-y-4">
-              <div className="h-16 w-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
-                1
-              </div>
-              <h3 className="text-xl font-semibold">Create Your Profile</h3>
-              <p className="text-muted-foreground">
-                Set up your profile with your skills, experience, education, and
-                job preferences.
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="h-16 w-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
-                2
-              </div>
-              <h3 className="text-xl font-semibold">Add Job Postings</h3>
-              <p className="text-muted-foreground">
-                Import jobs from URLs or paste job descriptions. Our AI will
-                analyze each one.
-              </p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="h-16 w-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
-                3
-              </div>
-              <h3 className="text-xl font-semibold">Apply & Track</h3>
-              <p className="text-muted-foreground">
-                Get personalized cover letters and track all your applications
-                in one dashboard.
-              </p>
-            </div>
           </div>
         </div>
       </section>
