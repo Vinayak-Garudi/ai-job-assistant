@@ -32,7 +32,7 @@ export default function AddJobForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ jobUrl: url }),
       });
       console.log("API Response:", response);
     } else {
@@ -56,12 +56,10 @@ export default function AddJobForm() {
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Enter Job Details</CardTitle>
-        <CardDescription>
-          Add a job by URL or manually enter job details
-        </CardDescription>
+        <CardDescription>Add a job by URL</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2 mb-6">
+        {/* <div className="flex gap-2 mb-6">
           <Button
             type="button"
             variant={mode === "url" ? "default" : "outline"}
@@ -78,7 +76,7 @@ export default function AddJobForm() {
           >
             Manual Entry
           </Button>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === "url" ? (

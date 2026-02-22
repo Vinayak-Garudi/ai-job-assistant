@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 
 export function LoginForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -45,13 +43,13 @@ export function LoginForm() {
           console.log(
             "Storing user-token and user-role cookies",
             response.data.token,
-            response.data.user.role
+            response.data.user.role,
           );
           document.cookie = `user-token=${response.data.token}; path=/; max-age=${maxAge}`;
           document.cookie = `user-role=${response.data.user.role}; path=/; max-age=${maxAge}`;
 
           // Use window.location for full page reload to ensure cookies are properly set
-          window.location.href = "/dashboard";
+          window.location.href = "/jobs/add";
         }
       }
     } catch (error) {

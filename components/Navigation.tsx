@@ -30,12 +30,12 @@ export default async function Navigation() {
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <>
-                <Link href="/dashboard">
+                {/* <Link href="/dashboard">
                   <Button variant="ghost" className="gap-2">
                     <LayoutDashboard className="h-4 w-4" />
                     Dashboard
                   </Button>
-                </Link>
+                </Link> */}
                 <Link href="/jobs/add">
                   <Button variant="ghost" className="gap-2">
                     <Plus className="h-4 w-4" />

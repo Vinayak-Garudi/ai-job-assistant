@@ -63,7 +63,7 @@ export function SignupForm() {
           }; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
 
           // Use window.location for full page reload to ensure cookies are properly set
-          window.location.href = "/dashboard";
+          window.location.href = "/jobs/add";
         }
       }
     } catch (error) {

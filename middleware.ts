@@ -20,18 +20,18 @@ export function middleware(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages to dashboard
   if (userRole !== "guest" && (path.includes("auth") || path === "/")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/jobs/add", request.url));
   }
 
   // Check if the current path is protected
   const isProtectedRoute = Object.keys(protectedRoutes).some((route) =>
-    path.startsWith(route)
+    path.startsWith(route),
   );
 
   if (isProtectedRoute) {
     // Find which protected route matches the current path
     const matchedRoute = Object.keys(protectedRoutes).find((route) =>
-      path.startsWith(route)
+      path.startsWith(route),
     );
 
     if (matchedRoute) {
