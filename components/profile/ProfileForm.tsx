@@ -11,11 +11,17 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   User,
   Briefcase,
   GraduationCap,
   FileText,
-  Upload,
   Loader2,
 } from "lucide-react";
 import type { UserProfile } from "@/types";
@@ -25,6 +31,7 @@ import { ProfessionalInfoEditor } from "./ProfessionalInfoEditor";
 import { SkillsEditor } from "./SkillsEditor";
 import { JobPreferenceSelector } from "./JobPreferenceSelector";
 import { toast } from "sonner";
+import { FileUpload } from "@/components/FileUpload";
 
 interface ProfileFormProps {
   initialProfile: UserProfile;
@@ -49,7 +56,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
 
   const updateBasicInfo = (
     field: keyof UserProfile["basicInfo"],
-    value: string | number
+    value: string | number,
   ) => {
     setProfile({
       ...profile,
@@ -59,7 +66,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
 
   const updateProfessionalInfo = (
     field: keyof UserProfile["professionalInfo"],
-    value: string | number
+    value: string | number,
   ) => {
     setProfile({
       ...profile,
@@ -69,7 +76,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
 
   const updateEducation = (
     field: keyof UserProfile["education"],
-    value: any
+    value: any,
   ) => {
     setProfile({
       ...profile,
@@ -113,7 +120,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       otherInfo: {
         ...profile.otherInfo,
         hobbiesAndInterests: profile.otherInfo.hobbiesAndInterests.filter(
-          (h) => h !== hobby
+          (h) => h !== hobby,
         ),
       },
     });
@@ -155,7 +162,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       education: {
         ...profile.education,
         certifications: profile.education.certifications.filter(
-          (c) => c !== cert
+          (c) => c !== cert,
         ),
       },
     });
@@ -180,7 +187,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       jobPreferences: {
         ...profile.jobPreferences,
         preferredLocations: profile.jobPreferences.preferredLocations.filter(
-          (l) => l !== location
+          (l) => l !== location,
         ),
       },
     });
@@ -202,7 +209,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       jobPreferences: {
         ...profile.jobPreferences,
         desiredRoles: profile.jobPreferences.desiredRoles.filter(
-          (r) => r !== role
+          (r) => r !== role,
         ),
       },
     });
@@ -225,6 +232,20 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
     setProfile({
       ...profile,
       jobPreferences: { ...profile.jobPreferences, workModes: modes },
+    });
+  };
+
+  const handleResumeUpload = (fileData: {
+    url: string;
+    fileName: string;
+    uploadedAt: Date;
+  }) => {
+    setProfile({
+      ...profile,
+      documents: {
+        ...profile.documents,
+        resume: fileData,
+      },
     });
   };
 
@@ -370,17 +391,27 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Graduation Year</label>
-                <Input
-                  type="number"
-                  value={profile.education.graduationYear}
+                <Select
+                  value={profile.education.graduationYear.toString()}
                   disabled={!isEditing}
-                  onChange={(e) =>
-                    updateEducation(
-                      "graduationYear",
-                      parseInt(e.target.value) || 0
-                    )
+                  onValueChange={(value) =>
+                    updateEducation("graduationYear", parseInt(value))
                   }
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select graduation year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 50 }, (_, i) => {
+                      const year = new Date().getFullYear() + 5 - i;
+                      return (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
@@ -409,48 +440,13 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
             <CardDescription>Upload and manage your resume</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {profile.documents.resume ? (
-                <div className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <FileText className="h-8 w-8 text-blue-600" />
-                    <div>
-                      <p className="font-medium">
-                        {profile.documents.resume.fileName}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Uploaded:{" "}
-                        {profile.documents.resume.uploadedAt.toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                  {isEditing && (
-                    <Button variant="outline" size="sm">
-                      <Upload className="h-4 w-4 mr-2" />
-                      Replace
-                    </Button>
-                  )}
-                </div>
-              ) : (
-                isEditing && (
-                  <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                    <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                    <p className="font-medium mb-2">Upload your resume</p>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      PDF, DOC, or DOCX (Max 5MB)
-                    </p>
-                    <Button>Choose File</Button>
-                  </div>
-                )
-              )}
-            </div>
+            <FileUpload
+              onUploadSuccess={handleResumeUpload}
+              acceptedFormats={[".pdf", ".docx", ".doc"]}
+              maxSizeInMB={10}
+              currentFile={profile.documents.resume}
+              disabled={!isEditing}
+            />
           </CardContent>
         </Card>
 
