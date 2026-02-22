@@ -103,3 +103,17 @@ export interface SearchFilters {
   status?: ApplicationStatus;
   location?: string;
 }
+
+// Equipment Types
+export interface TennisEquipment {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+  condition: string;
+  category: string;
+  location: string;
+  brand?: string;
+  createdAt: string;
+}

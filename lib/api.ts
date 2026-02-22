@@ -1,4 +1,3 @@
-import nextConfig from "@/next.config";
 import { handleClientLogout } from "./authHandlerClient";
 import { toast } from "sonner";
 
@@ -17,7 +16,7 @@ type ApiResponse = {
   success: boolean;
 };
 
-const BASE_URL = nextConfig?.publicRuntimeConfig?.apiUrl || "";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 /**
  * Handles API requests with proper error handling and type safety
@@ -27,7 +26,7 @@ const BASE_URL = nextConfig?.publicRuntimeConfig?.apiUrl || "";
  */
 export async function apiRequest(
   endpoint: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<ApiResponse> {
   const { params, ...fetchOptions } = options;
   // Construct URL with query parameters if they exist
@@ -67,7 +66,7 @@ export async function apiRequest(
   if (!token && typeof document !== "undefined") {
     const documentCookies = document.cookie.split("; ");
     const userTokenCookie = documentCookies.find((cookie) =>
-      cookie.startsWith("user-token")
+      cookie.startsWith("user-token"),
     );
     if (userTokenCookie) {
       token = userTokenCookie.split("=")[1];
@@ -153,7 +152,7 @@ export const api = {
   post: <T>(
     endpoint: string,
     data?: any,
-    options: Omit<FetchOptions, "method" | "body"> = {}
+    options: Omit<FetchOptions, "method" | "body"> = {},
   ) =>
     apiRequest(endpoint, {
       ...options,
@@ -164,7 +163,7 @@ export const api = {
   put: <T>(
     endpoint: string,
     data?: any,
-    options: Omit<FetchOptions, "method" | "body"> = {}
+    options: Omit<FetchOptions, "method" | "body"> = {},
   ) =>
     apiRequest(endpoint, {
       ...options,
@@ -175,7 +174,7 @@ export const api = {
   patch: <T>(
     endpoint: string,
     data?: any,
-    options: Omit<FetchOptions, "method" | "body"> = {}
+    options: Omit<FetchOptions, "method" | "body"> = {},
   ) =>
     apiRequest(endpoint, {
       ...options,
