@@ -392,7 +392,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Graduation Year</label>
                 <Select
-                  value={profile.education.graduationYear.toString()}
+                  value={profile.education.graduationYear?.toString()}
                   disabled={!isEditing}
                   onValueChange={(value) =>
                     updateEducation("graduationYear", parseInt(value))
