@@ -41,7 +41,7 @@ export default async function Navigation() {
                 <Link href="/jobs/add">
                   <Button variant="ghost" className="gap-2">
                     <Plus className="h-4 w-4" />
-                    Add Job
+                    Analyse Job
                   </Button>
                 </Link>
                 <Link href="/profile">

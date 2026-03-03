@@ -30,13 +30,13 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Streamline your job search with intelligent matching, personalized
-              cover letters, and application tracking—all powered by AI.
+              Streamline your job search with intelligent matching powered by
+              AI.
             </p>
             <div className="flex gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/auth/signup">
-                  Get Started Free
+                  Get Started
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -56,12 +56,38 @@ export default function Home() {
               Everything You Need to Land Your Next Role
             </h2>
             <p className="text-muted-foreground text-lg">
-              Powerful features to help you find, analyze, and apply for jobs
+              Powerful features to help you analyze, and apply for jobs
               intelligently
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-pink-600 dark:text-pink-400" />
+                </div>
+                <CardTitle>Profile Optimization</CardTitle>
+                <CardDescription>
+                  Build a comprehensive profile with your skills, education, and
+                  preferences to get better job matches.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-4">
+                  <Sparkles className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <CardTitle>Easy Job Import</CardTitle>
+                <CardDescription>
+                  Add jobs by simply pasting URLs from LinkedIn, Indeed, or any
+                  job board.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
@@ -84,32 +110,6 @@ export default function Home() {
                 <CardDescription>
                   Our AI analyzes your skills, experience, and preferences to
                   show how well you match with each position.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="h-12 w-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center mb-4">
-                  <TrendingUp className="h-6 w-6 text-pink-600 dark:text-pink-400" />
-                </div>
-                <CardTitle>Profile Optimization</CardTitle>
-                <CardDescription>
-                  Build a comprehensive profile with your skills, education, and
-                  preferences to get better job matches.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="h-12 w-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-                </div>
-                <CardTitle>Easy Job Import</CardTitle>
-                <CardDescription>
-                  Add jobs by simply pasting URLs from LinkedIn, Indeed, or any
-                  job board, or manually enter job details.
                 </CardDescription>
               </CardHeader>
             </Card>

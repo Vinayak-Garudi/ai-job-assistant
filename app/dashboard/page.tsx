@@ -21,7 +21,7 @@ export default async function DashboardPage() {
         <Button asChild>
           <Link href="/jobs/add">
             <Plus className="h-4 w-4 mr-2" />
-            Add New Job
+            Analyse New Job
           </Link>
         </Button>
       </div>

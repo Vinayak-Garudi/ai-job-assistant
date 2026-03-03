@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 interface JobAnalysisResultProps {
   analysis: {
@@ -16,6 +15,7 @@ interface JobAnalysisResultProps {
     areasToImprove: string[];
     detailedAnalysis: string;
     analyzedAt: string;
+    invalidURL?: boolean;
   };
   jobUrl: string;
 }
@@ -24,12 +24,6 @@ export default function JobAnalysisResult({
   analysis,
   jobUrl,
 }: JobAnalysisResultProps) {
-  const getMatchColor = (percentage: number) => {
-    if (percentage >= 80) return "bg-green-500";
-    if (percentage >= 60) return "bg-yellow-500";
-    return "bg-red-500";
-  };
-
   const getMatchLabel = (percentage: number) => {
     if (percentage >= 80) return "Excellent Match";
     if (percentage >= 60) return "Good Match";
@@ -48,43 +42,15 @@ export default function JobAnalysisResult({
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4 mb-4">
-            {/* <div className="relative">
-              <svg className="transform -rotate-90">
-                <circle
-                  cx="64"
-                  cy="64"
-                  r="56"
-                  stroke="currentColor"
-                  strokeWidth="8"
-                  fill="none"
-                  className="text-gray-200 dark:text-gray-700"
-                />
-                <circle
-                  cx="64"
-                  cy="64"
-                  r="56"
-                  stroke="currentColor"
-                  strokeWidth="8"
-                  fill="none"
-                  strokeDasharray={`${2 * Math.PI * 56}`}
-                  strokeDashoffset={`${
-                    2 * Math.PI * 56 * (1 - analysis.matchingPercentage / 100)
-                  }`}
-                  className={getMatchColor(analysis.matchingPercentage)}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-3xl font-bold">
-                  {analysis.matchingPercentage}%
-                </span>
-              </div>
-            </div> */}
             <div>
-              <p className="text-sm text-muted-foreground">
-                {getMatchLabel(analysis.matchingPercentage)}:{" "}
-                {analysis.matchingPercentage}%
-              </p>
+              {analysis.invalidURL ? (
+                <p className="text-sm text-red-500">Invalid Job URL Entered</p>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {getMatchLabel(analysis.matchingPercentage)}:{" "}
+                  {analysis.matchingPercentage}%
+                </p>
+              )}
               <p className="text-sm text-muted-foreground">
                 Analyzed on{" "}
                 {new Date(analysis.analyzedAt).toLocaleDateString("en-US", {

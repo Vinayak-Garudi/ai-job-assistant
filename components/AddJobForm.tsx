@@ -92,8 +92,7 @@ export default function AddJobForm() {
     <>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Enter Job Details</CardTitle>
-          <CardDescription>Add a job by URL</CardDescription>
+          <CardTitle>Enter Job Postin URL</CardTitle>
         </CardHeader>
         <CardContent>
           {/* <div className="flex gap-2 mb-6">
@@ -118,9 +117,9 @@ export default function AddJobForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {mode === "url" ? (
               <div className="space-y-2">
-                <label htmlFor="url" className="text-sm font-medium">
+                {/* <label htmlFor="url" className="text-sm font-medium">
                   Job Posting URL
-                </label>
+                </label> */}
                 <Input
                   id="url"
                   type="url"
