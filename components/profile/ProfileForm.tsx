@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useRef, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,6 +23,9 @@ import {
   GraduationCap,
   FileText,
   Loader2,
+  Trash2,
+  Upload,
+  Download,
 } from "lucide-react";
 import type { UserProfile } from "@/types";
 import { saveProfile } from "@/app/profile/actions";
@@ -31,7 +34,7 @@ import { ProfessionalInfoEditor } from "./ProfessionalInfoEditor";
 import { SkillsEditor } from "./SkillsEditor";
 import { JobPreferenceSelector } from "./JobPreferenceSelector";
 import { toast } from "sonner";
-import { FileUpload } from "@/components/FileUpload";
+import { FileUpload, type FileUploadHandle } from "@/components/FileUpload";
 
 interface ProfileFormProps {
   initialProfile: UserProfile;
@@ -41,6 +44,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
   const [profile, setProfile] = useState<UserProfile>(initialProfile);
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const fileUploadRef = useRef<FileUploadHandle>(null);
 
   const handleSave = () => {
     startTransition(async () => {
@@ -249,6 +253,16 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
     });
   };
 
+  const handleResumeDelete = () => {
+    setProfile({
+      ...profile,
+      documents: {
+        ...profile.documents,
+        resume: undefined,
+      },
+    });
+  };
+
   return (
     <>
       {/* Header Actions */}
@@ -441,12 +455,53 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
           </CardHeader>
           <CardContent>
             <FileUpload
+              ref={fileUploadRef}
               onUploadSuccess={handleResumeUpload}
               acceptedFormats={[".pdf", ".docx", ".doc"]}
               maxSizeInMB={10}
               currentFile={profile.documents.resume}
               disabled={!isEditing}
             />
+            {profile.documents.resume && (
+              <div
+                className="flex items-center justify-end gap-2"
+                style={{ marginTop: "12px" }}
+              >
+                {isEditing && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      onClick={() => fileUploadRef.current?.triggerFileSelect()}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Replace
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      type="button"
+                      onClick={handleResumeDelete}
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete
+                    </Button>
+                  </>
+                )}
+                <a
+                  href={profile.documents.resume.url}
+                  download={profile.documents.resume.fileName}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="sm" type="button">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download
+                  </Button>
+                </a>
+              </div>
+            )}
           </CardContent>
         </Card>
 
