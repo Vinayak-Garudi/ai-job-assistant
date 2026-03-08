@@ -80,6 +80,9 @@ export async function apiRequest(
 
   try {
     const response = await fetch(url.toString(), {
+      // Disable Next.js fetch cache for authenticated/dynamic requests
+      // so stale user data is never served from cache
+      cache: "no-store",
       ...fetchOptions,
       headers,
     });
