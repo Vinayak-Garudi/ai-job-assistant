@@ -14,9 +14,16 @@ export function proxy(request: NextRequest) {
   // Get the pathname from the URL
   const path = request.nextUrl.pathname;
 
-  // Get the user's role from the session/token
-  // This is an example - replace with your actual auth logic
+  // Read cookies directly from the request object — no async/await needed
   const userRole = request.cookies.get("user-role")?.value || "guest";
+  const userToken = request.cookies.get("user-token")?.value;
+
+  // Build the response first so we can attach headers
+  const response = NextResponse.next();
+
+  // ✅ Forward auth state as readable headers to avoid await cookies() in components
+  response.headers.set("x-is-authenticated", userToken ? "true" : "false");
+  response.headers.set("x-user-role", userRole);
 
   // Redirect authenticated users away from auth pages to dashboard
   if (userRole !== "guest" && (path.includes("auth") || path === "/")) {
@@ -46,8 +53,8 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Allow the request to continue
-  return NextResponse.next();
+  // Return response with the auth headers attached
+  return response;
 }
 
 // Configure which paths the middleware should run on

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
+import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import { redirect, RedirectType } from "next/navigation";
 import { handleAuthLogout } from "@/lib/authHandler";
@@ -7,10 +7,9 @@ import { handleAuthLogout } from "@/lib/authHandler";
 import { Sparkles, User, Plus } from "lucide-react";
 
 export default async function Navigation() {
-  // Check if user is authenticated
-  const cookieStore = await cookies();
-  const userToken = cookieStore.get("user-token");
-  const isAuthenticated = !!userToken?.value;
+  // Read the header set by proxy.ts — already computed before render, no I/O
+  const headerStore = await headers();
+  const isAuthenticated = headerStore.get("x-is-authenticated") === "true";
 
   const handleLogout = async () => {
     "use server";
