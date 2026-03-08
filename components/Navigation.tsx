@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { redirect, RedirectType } from "next/navigation";
 import { handleAuthLogout } from "@/lib/authHandler";
 // import { ThemeSwitcher } from "./theme-switcher";
-import { Sparkles, User, Plus } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { NavLinks } from "./NavLinks";
 
 export default async function Navigation() {
   // Read the header set by proxy.ts — already computed before render, no I/O
@@ -37,18 +38,7 @@ export default async function Navigation() {
                     Dashboard
                   </Button>
                 </Link> */}
-                <Link href="/jobs/add">
-                  <Button variant="ghost" className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Analyse Job
-                  </Button>
-                </Link>
-                <Link href="/profile">
-                  <Button variant="ghost" className="gap-2">
-                    <User className="h-4 w-4" />
-                    Profile
-                  </Button>
-                </Link>
+                <NavLinks />
                 {/* <ThemeSwitcher /> */}
                 <Button variant="outline" onClick={handleLogout}>
                   Logout
