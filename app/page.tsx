@@ -1,3 +1,6 @@
+// Home page has no dynamic data — pre-render at build time
+export const dynamic = "force-static";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
