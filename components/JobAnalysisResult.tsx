@@ -16,6 +16,7 @@ interface JobAnalysisResultProps {
     detailedAnalysis: string;
     analyzedAt: string;
     invalidURL?: boolean;
+    resumeFeedback: string[];
   };
   jobUrl: string;
 }
@@ -114,6 +115,30 @@ export default function JobAnalysisResult({
               <li key={index} className="flex gap-3">
                 <span className="text-orange-500 mt-1">●</span>
                 <span className="flex-1">{area}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* Resume Feedback Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-white-500">●</span>
+            Resume Feedback
+          </CardTitle>
+          <CardDescription>
+            Feedback on your resume to help improve your chances of getting
+            noticed
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-3">
+            {analysis.resumeFeedback.map((feedback, index) => (
+              <li key={index} className="flex gap-3">
+                <span className="text-white-500 mt-1">●</span>
+                <span className="flex-1">{feedback}</span>
               </li>
             ))}
           </ul>

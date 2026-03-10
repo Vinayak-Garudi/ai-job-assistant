@@ -3,13 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
 import JobAnalysisResult from "./JobAnalysisResult";
 
@@ -19,6 +13,8 @@ interface AnalysisData {
   areasToImprove: string[];
   detailedAnalysis: string;
   analyzedAt: string;
+  invalidURL?: boolean;
+  resumeFeedback: string[];
 }
 
 export default function AddJobForm() {

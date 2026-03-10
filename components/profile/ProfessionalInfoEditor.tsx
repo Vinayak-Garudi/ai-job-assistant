@@ -8,7 +8,7 @@ interface ProfessionalInfoEditorProps {
   isEditing: boolean;
   onUpdate: (
     field: keyof UserProfile["professionalInfo"],
-    value: string | number
+    value: string | number,
   ) => void;
 }
 
@@ -36,15 +36,43 @@ export function ProfessionalInfoEditor({
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Years of Experience</label>
-        <Input
-          type="number"
-          value={profile.professionalInfo.experienceYears}
-          disabled={!isEditing}
-          onChange={(e) =>
-            onUpdate("experienceYears", parseInt(e.target.value) || 0)
-          }
-        />
+        <label className="text-sm font-medium">Experience</label>
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <Input
+              type="number"
+              placeholder="Years"
+              min={0}
+              value={profile.professionalInfo.experienceYears}
+              disabled={!isEditing}
+              onChange={(e) =>
+                onUpdate("experienceYears", parseInt(e.target.value) || 0)
+              }
+            />
+            <span className="text-xs text-muted-foreground mt-1 block">
+              Years
+            </span>
+          </div>
+          <div className="flex-1">
+            <Input
+              type="number"
+              placeholder="Months"
+              min={0}
+              max={11}
+              value={profile.professionalInfo.experienceMonths ?? 0}
+              disabled={!isEditing}
+              onChange={(e) =>
+                onUpdate(
+                  "experienceMonths",
+                  Math.min(11, parseInt(e.target.value) || 0),
+                )
+              }
+            />
+            <span className="text-xs text-muted-foreground mt-1 block">
+              Months
+            </span>
+          </div>
+        </div>
       </div>
       <div className="space-y-2">
         <label className="text-sm font-medium">Industry</label>

@@ -54,6 +54,7 @@ export interface ProfessionalInfo {
   currentTitle: string;
   currentCompany: string;
   experienceYears: number;
+  experienceMonths: number;
   industry: string;
 }
 
