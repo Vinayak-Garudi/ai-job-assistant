@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { Job, ApplicationStatus } from "@/types";
+import type { Job, ApplicationStatus, JobMatch } from "@/types";
+import { apiRequest } from "@/lib/api";
 
 // Mock data for demonstration
 const mockJobs: Job[] = [
@@ -88,7 +89,7 @@ export async function getUserJobs(): Promise<Job[]> {
 // Update job application status
 export async function updateJobStatus(
   jobId: string,
-  status: ApplicationStatus
+  status: ApplicationStatus,
 ) {
   try {
     // TODO: Update in database
@@ -124,20 +125,41 @@ export async function deleteJob(jobId: string) {
   }
 }
 
-// Update job notes
-export async function updateJobNotes(jobId: string, notes: string) {
-  try {
-    // TODO: Update in database
-    console.log("Updating job notes:", jobId, notes);
+export async function deleteJobMatch(id: string) {
+  const response = await apiRequest(`job-match/${id}`, { method: "DELETE" });
+  if (!response.success)
+    throw new Error(response.message || "Failed to delete job");
+  revalidatePath("/dashboard");
+}
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 300));
+// Fetch job match history from the API
+export interface JobMatchStats {
+  totalJobs: number;
+  avgMatch: number;
+  highMatches: number;
+  totalAnalyzed: number;
+}
 
-    revalidatePath("/dashboard");
+export interface JobMatchesResult {
+  jobs: JobMatch[];
+  stats: JobMatchStats;
+}
 
-    return { success: true, message: "Notes updated successfully" };
-  } catch (error) {
-    console.error("Error updating notes:", error);
-    return { success: false, message: "Failed to update notes" };
+export async function getJobMatches(): Promise<JobMatchesResult> {
+  const response = await apiRequest("job-match/history");
+  if (!response.success || !response.data) {
+    return {
+      jobs: [],
+      stats: { totalJobs: 0, avgMatch: 0, highMatches: 0, totalAnalyzed: 0 },
+    };
   }
+  return {
+    jobs: response.data ?? [],
+    stats: response.stats ?? {
+      totalJobs: 0,
+      avgMatch: 0,
+      highMatches: 0,
+      totalAnalyzed: 0,
+    },
+  };
 }

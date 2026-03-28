@@ -27,7 +27,7 @@ export function proxy(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages to dashboard
   if (userRole !== "guest" && (path.includes("auth") || path === "/")) {
-    return NextResponse.redirect(new URL("/jobs/add", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // Check if the current path is protected

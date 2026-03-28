@@ -1,51 +1,42 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Briefcase, FileCheck, Calendar, Award } from "lucide-react";
-import type { Job } from "@/types";
+import { Briefcase, TrendingUp, Star, CheckCircle } from "lucide-react";
+import type { JobMatchStats } from "@/app/dashboard/actions";
 
 interface DashboardStatsProps {
-  jobs: Job[];
+  stats: JobMatchStats;
 }
 
-export default function DashboardStats({ jobs }: DashboardStatsProps) {
-  const totalJobs = jobs.length;
-  const appliedCount = jobs.filter(
-    (j) => j.applicationStatus === "Applied"
-  ).length;
-  const interviewsCount = jobs.filter(
-    (j) => j.applicationStatus === "Interview Scheduled"
-  ).length;
-  const offersCount = jobs.filter(
-    (j) => j.applicationStatus === "Offer Received"
-  ).length;
+export default function DashboardStats({ stats }: DashboardStatsProps) {
+  const { totalJobs, avgMatch, highMatches, totalAnalyzed } = stats;
 
-  const stats = [
+  const statCards = [
     {
-      label: "Total Jobs",
+      label: "Total Tracked",
       value: totalJobs,
       icon: Briefcase,
       color: "text-blue-600",
       bgColor: "bg-blue-50 dark:bg-blue-900/20",
     },
     {
-      label: "Applied",
-      value: appliedCount,
-      icon: FileCheck,
+      label: "Avg Match Score",
+      value: `${avgMatch}%`,
+      icon: TrendingUp,
       color: "text-purple-600",
       bgColor: "bg-purple-50 dark:bg-purple-900/20",
     },
     {
-      label: "Interviews",
-      value: interviewsCount,
-      icon: Calendar,
+      label: "High Matches",
+      value: highMatches,
+      icon: Star,
       color: "text-yellow-600",
       bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
     },
     {
-      label: "Offers",
-      value: offersCount,
-      icon: Award,
+      label: "Analyzed",
+      value: totalAnalyzed,
+      icon: CheckCircle,
       color: "text-green-600",
       bgColor: "bg-green-50 dark:bg-green-900/20",
     },
@@ -53,7 +44,7 @@ export default function DashboardStats({ jobs }: DashboardStatsProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((stat) => (
+      {statCards.map((stat) => (
         <Card key={stat.label}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">

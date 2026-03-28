@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, User } from "lucide-react";
+import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function NavLinks() {
@@ -13,16 +13,15 @@ export function NavLinks() {
 
   return (
     <>
-      <Link href="/jobs/add">
+      <Link href="/dashboard">
         <Button
           variant="ghost"
           className={cn(
             "gap-2",
-            isActive("/jobs/add") && "font-bold underline",
+            isActive("/dashboard") && "font-bold underline",
           )}
         >
-          <Plus className="h-4 w-4" />
-          Analyse Job
+          Dashboard
         </Button>
       </Link>
       <Link href="/profile">

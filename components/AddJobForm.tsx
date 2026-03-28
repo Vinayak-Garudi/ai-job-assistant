@@ -36,12 +36,8 @@ export default function AddJobForm() {
     setError(null);
     setAnalysisResult(null);
 
-    console.log("Submitting job with mode:", mode, url);
     if (mode === "url") {
       try {
-        // Handle URL submission
-        console.log("Job URL:", url);
-
         const response = await apiRequest("job-match/analyze-url", {
           method: "POST",
           headers: {
@@ -49,7 +45,6 @@ export default function AddJobForm() {
           },
           body: JSON.stringify({ jobUrl: url }),
         });
-        console.log("API Response:", response);
 
         if (response.success && response.data?.analysis) {
           setAnalysisResult(response.data.analysis);
@@ -67,21 +62,8 @@ export default function AddJobForm() {
         setIsLoading(false);
       }
     } else {
-      // Handle manual submission
-      console.log("Job Details:", {
-        title,
-        company,
-        location,
-        description,
-      });
       setIsLoading(false);
     }
-    // Reset form
-    // setUrl("");
-    // setDescription("");
-    // setTitle("");
-    // setCompany("");
-    // setLocation("");
   };
 
   return (

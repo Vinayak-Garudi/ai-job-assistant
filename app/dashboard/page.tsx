@@ -2,17 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getUserJobs } from "./actions";
+import { getJobMatches } from "./actions";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import JobListClient from "@/components/dashboard/JobListClient";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 async function DashboardData() {
-  const jobs = await getUserJobs();
+  const { jobs, stats } = await getJobMatches();
+
   return (
     <>
-      <DashboardStats jobs={jobs} />
+      <DashboardStats stats={stats} />
       <JobListClient initialJobs={jobs} />
     </>
   );

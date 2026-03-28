@@ -49,7 +49,7 @@ export function LoginForm() {
           document.cookie = `user-role=${response.data.user.role}; path=/; max-age=${maxAge}`;
 
           // Use window.location for full page reload to ensure cookies are properly set
-          window.location.href = "/jobs/add";
+          window.location.href = "/dashboard";
         }
       }
     } catch (error) {

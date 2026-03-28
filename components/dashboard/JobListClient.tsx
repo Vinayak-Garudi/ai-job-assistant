@@ -1,68 +1,65 @@
 "use client";
 
-import JobCardClient from "./JobCardClient";
-import JobSearchFilter from "@/components/JobSearchFilter";
-import type { Job, SearchFilters } from "@/types";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import type { JobMatch } from "@/types";
+import JobMatchCard from "./JobMatchCard";
 
 interface JobListClientProps {
-  initialJobs: Job[];
+  initialJobs: JobMatch[];
 }
 
 export default function JobListClient({ initialJobs }: JobListClientProps) {
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>(initialJobs);
+  const [jobs, setJobs] = useState(initialJobs);
+  const [query, setQuery] = useState("");
 
-  const handleFilterChange = (filters: SearchFilters) => {
-    const filtered = initialJobs.filter((job) => {
-      if (
-        filters.query &&
-        !job.title.toLowerCase().includes(filters.query.toLowerCase()) &&
-        !job.company.toLowerCase().includes(filters.query.toLowerCase())
-      ) {
-        return false;
-      }
-
-      if (filters.jobType && job.jobType !== filters.jobType) {
-        return false;
-      }
-
-      if (filters.workMode && job.workMode !== filters.workMode) {
-        return false;
-      }
-
-      if (filters.status && job.applicationStatus !== filters.status) {
-        return false;
-      }
-
-      if (
-        filters.location &&
-        !job.location.toLowerCase().includes(filters.location.toLowerCase())
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-
-    setFilteredJobs(filtered);
-  };
+  const filteredJobs = jobs.filter((job) => {
+    if (!query) return true;
+    const q = query.toLowerCase();
+    return (
+      job.jobTitle.toLowerCase().includes(q) ||
+      job.company.toLowerCase().includes(q) ||
+      job.location.toLowerCase().includes(q)
+    );
+  });
 
   return (
-    <>
-      <JobSearchFilter onFilterChange={handleFilterChange} />
-
-      <div className="grid grid-cols-1 gap-6">
-        {filteredJobs.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            <p className="text-lg">No jobs found matching your filters.</p>
-            <p className="text-sm mt-2">
-              Try adjusting your search criteria or add new jobs.
-            </p>
-          </div>
-        ) : (
-          filteredJobs.map((job) => <JobCardClient key={job.id} job={job} />)
-        )}
+    <div className="space-y-4">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search by title, company, or location..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="pl-10"
+        />
       </div>
-    </>
+
+      {filteredJobs.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <p className="text-lg">No jobs found.</p>
+          <p className="text-sm mt-2">
+            {query
+              ? "Try a different search term."
+              : "Analyse a job to get started."}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {filteredJobs.map((job) => (
+            <JobMatchCard
+              key={job.id || job._id}
+              job={job}
+              onDelete={() =>
+                setJobs((prev) =>
+                  prev.filter((j) => (j._id ?? j.id) !== (job._id ?? job.id)),
+                )
+              }
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

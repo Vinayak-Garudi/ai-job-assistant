@@ -86,6 +86,32 @@ export interface JobPreferences {
   desiredRoles: string[];
 }
 
+// Job Match Types (from API)
+export interface JobMatchAnalysis {
+  matchingPercentage: number;
+  strengths: string[];
+  areasToImprove: string[];
+  resumeFeedback: string[];
+  detailedAnalysis: string;
+  analyzedAt: string;
+}
+
+export interface JobMatch {
+  id: string;
+  _id?: string;
+  userId: string;
+  jobTitle: string;
+  company: string;
+  location: string;
+  jobDescription: string;
+  jobUrl: string;
+  shortDescription: string;
+  status: "analyzed" | "pending" | "failed";
+  analysis: JobMatchAnalysis;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Form Types
 export interface JobFormData {
   url?: string;
