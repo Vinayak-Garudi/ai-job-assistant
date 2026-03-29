@@ -30,13 +30,6 @@ export async function apiRequest(
   options: FetchOptions = {},
 ): Promise<ApiResponse> {
   const { params, ...fetchOptions } = options;
-  // Construct URL with query parameters if they exist
-  const url = new URL(endpoint, BASE_URL);
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
-    });
-  }
 
   // Default headers
   const headers = new Headers(fetchOptions.headers);
@@ -80,6 +73,17 @@ export async function apiRequest(
   }
 
   try {
+    // Construct URL with query parameters if they exist
+    if (!BASE_URL) {
+      return { data: null, message: "API URL is not configured", success: false };
+    }
+    const url = new URL(endpoint, BASE_URL);
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value);
+      });
+    }
+
     const response = await fetch(url.toString(), {
       // Disable Next.js fetch cache for authenticated/dynamic requests
       // so stale user data is never served from cache
@@ -133,7 +137,7 @@ export async function apiRequest(
       error instanceof Error
         ? error.message
         : "Something went wrong from the server side";
-    console.error("Network error:", error);
+    console.warn("Network error:", errorMessage);
 
     // Show error toast on client side
     if (typeof window !== "undefined") {
