@@ -218,7 +218,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 ## Additional Resources
 
-- [Shadcn/ui Documentation](https://ui.shadcn.com/docs)
+- [Shadcn/ui LLM Reference](https://ui.shadcn.com/llms.txt)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Lucide React Icons](https://lucide.dev/icons/)
 - [Radix UI Primitives](https://www.radix-ui.com/primitives)

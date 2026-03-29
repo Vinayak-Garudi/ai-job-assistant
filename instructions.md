@@ -434,7 +434,7 @@ import { Card } from "@/components/ui/card";
 ## Additional Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [Shadcn/ui Documentation](https://ui.shadcn.com/docs)
+- [Shadcn/ui LLM Reference](https://ui.shadcn.com/llms.txt)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [React Server Components](https://react.dev/reference/react/use-client)
 
