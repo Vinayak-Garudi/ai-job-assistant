@@ -38,7 +38,7 @@ export default function RootLayout({
         <ThemeProvider>
           <ThemeSwitcher />
           <Navigation />
-          {children}
+          <div style={{ paddingBlockStart: "80px" }}>{children}</div>
           <Toaster />
         </ThemeProvider>
       </body>
