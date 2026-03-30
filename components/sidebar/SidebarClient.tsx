@@ -19,11 +19,8 @@ export function SidebarClient() {
     <aside
       style={{
         transform: open ? "translateX(0)" : "translateX(-100%)",
-        paddingTop: "80px",
-        height: "100vh",
-        overflowY: "auto",
       }}
-      className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r border-border bg-white dark:bg-zinc-900 shadow-lg z-40 transition-transform duration-300 ease-in-out"
+      className="fixed overflow-y-auto h-screen left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r border-border bg-white dark:bg-zinc-900 shadow-lg z-40 transition-transform duration-300 ease-in-out"
     >
       <nav className="p-3 flex flex-col gap-1">
         {navLinks.map(({ href, label, Icon }) => (

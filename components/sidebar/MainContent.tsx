@@ -15,7 +15,7 @@ export function MainContent({ children, isAuthenticated }: MainContentProps) {
     <div
       style={{
         paddingBlockStart: "80px",
-        marginLeft: isAuthenticated && open ? "256px" : "0px",
+        // marginLeft: isAuthenticated && open ? "256px" : "0px",
         transition: "margin-left 300ms ease-in-out",
       }}
     >
