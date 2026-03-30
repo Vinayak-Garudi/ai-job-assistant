@@ -52,59 +52,52 @@ export default function JobMatchDetailClient({
     <>
       {/* Header card */}
       <Card>
-        <CardHeader className="pb-3">
-          <div className="flex justify-between items-start gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-bold leading-tight mb-2">
-                {job.jobTitle}
-              </h1>
-              <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <Briefcase className="h-3.5 w-3.5 shrink-0" />
-                  {job.company}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 shrink-0" />
-                  {job.location}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-              <Badge className={getMatchColor(analysis.matchingPercentage)}>
-                {analysis.matchingPercentage}% —{" "}
-                {getMatchLabel(analysis.matchingPercentage)}
-              </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5"
-                onClick={handleReanalyze}
-                disabled={reanalyzing}
-              >
-                <RefreshCw
-                  className={`h-3.5 w-3.5 ${reanalyzing ? "animate-spin" : ""}`}
-                />
-                {reanalyzing ? "Analyzing…" : "Reanalyze"}
-              </Button>
-              <a
-                href={job.jobUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="View job posting"
-              >
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  View Job
-                </Button>
-              </a>
+        <CardHeader>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl font-bold leading-tight mb-2">
+              {job.jobTitle}
+            </h1>
+            <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <Briefcase className="h-3.5 w-3.5 shrink-0" />
+                {job.company}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5 shrink-0" />
+                {job.location}
+              </span>
             </div>
           </div>
+          <Badge className={getMatchColor(analysis.matchingPercentage)}>
+            {analysis.matchingPercentage}% —{" "}
+            {getMatchLabel(analysis.matchingPercentage)}
+          </Badge>
+          <div className="flex justify-start gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5"
+              onClick={handleReanalyze}
+              disabled={reanalyzing}
+            >
+              <RefreshCw
+                className={`h-3.5 w-3.5 ${reanalyzing ? "animate-spin" : ""}`}
+              />
+              {reanalyzing ? "Analyzing…" : "Reanalyze"}
+            </Button>
+            <a
+              href={job.jobUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View job posting"
+            >
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <ExternalLink className="h-3.5 w-3.5" />
+                View Job
+              </Button>
+            </a>
+          </div>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            {job.shortDescription}
-          </p>
-        </CardContent>
       </Card>
 
       {/* Strengths & Areas to Improve */}

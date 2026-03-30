@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Briefcase, TrendingUp, Star, CheckCircle } from "lucide-react";
+import { TrendingUp, Star } from "lucide-react";
 import type { JobMatchStats } from "@/types";
 
 interface DashboardStatsProps {
@@ -7,36 +7,22 @@ interface DashboardStatsProps {
 }
 
 export default function DashboardStats({ stats }: DashboardStatsProps) {
-  const { totalJobs, avgMatch, highMatches, totalAnalyzed } = stats;
+  const { totalJobs, avgMatch, highMatches } = stats;
 
   const statCards = [
     {
-      label: "Total Tracked",
-      value: totalJobs,
-      icon: Briefcase,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50 dark:bg-blue-900/20",
-    },
-    {
-      label: "Avg Match Score",
-      value: `${avgMatch}%`,
-      icon: TrendingUp,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50 dark:bg-purple-900/20",
-    },
-    {
       label: "High Matches",
-      value: highMatches,
+      value: `${highMatches} / ${totalJobs}`,
       icon: Star,
       color: "text-yellow-600",
       bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
     },
     {
-      label: "Analyzed",
-      value: totalAnalyzed,
-      icon: CheckCircle,
-      color: "text-green-600",
-      bgColor: "bg-green-50 dark:bg-green-900/20",
+      label: "Avg Match Score",
+      value: `${avgMatch.toFixed(1)}%`,
+      icon: TrendingUp,
+      color: "text-purple-600",
+      bgColor: "bg-purple-50 dark:bg-purple-900/20",
     },
   ];
 
