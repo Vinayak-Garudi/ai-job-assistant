@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Toaster } from "@/components/ui/sonner";
 import Navigation from "@/components/Navigation";
 import { SidebarProvider } from "@/components/sidebar/SidebarContext";
@@ -40,7 +39,6 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <SidebarProvider>
-            <ThemeSwitcher />
             <Navigation />
             <Sidebar />
             <MainContent>{children}</MainContent>

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { redirect, RedirectType } from "next/navigation";
 import { handleAuthLogout } from "@/lib/authHandler";
 import { Sparkles } from "lucide-react";
-import { NavLinks } from "./NavLinks";
 import { UserMenu } from "./UserMenu";
 import { SidebarToggle } from "./sidebar/SidebarToggle";
 
@@ -36,15 +35,10 @@ export default async function Navigation() {
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
               <>
-                {/* <NavLinks /> */}
                 <UserMenu onLogout={handleLogout} />
               </>
             ) : (
               <>
-                {/* <ThemeSwitcher /> */}
-                {/* <Link href="/auth/login">
-                  <Button variant="ghost">Login</Button>
-                </Link> */}
                 <Link href="/auth/signup">
                   <Button>Get Started</Button>
                 </Link>
