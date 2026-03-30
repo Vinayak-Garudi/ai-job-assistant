@@ -1,5 +1,0 @@
-export { Button } from "./Button"
-export { Card } from "./Card"
-export { Input } from "./Input"
-export { SearchableSelect } from "./SearchableSelect"
-export { Switch } from "./Switch"

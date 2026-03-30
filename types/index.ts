@@ -1,28 +1,3 @@
-// Job Types
-export interface Job {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  jobType: "Full Time" | "Part Time" | "Internship" | "Contract";
-  workMode: "Remote" | "On-site" | "Hybrid";
-  description: string;
-  requirements: string[];
-  url?: string;
-  postedDate: Date;
-  applicationStatus: ApplicationStatus;
-  aiAnalysis?: JobAnalysis;
-  notes?: string;
-  appliedDate?: Date;
-}
-
-export type ApplicationStatus =
-  | "Saved"
-  | "Applied"
-  | "Interview Scheduled"
-  | "Rejected"
-  | "Offer Received";
-
 export interface JobAnalysis {
   skillMatchPercentage: number;
   strengths: string[];
@@ -110,37 +85,4 @@ export interface JobMatch {
   analysis: JobMatchAnalysis;
   createdAt: string;
   updatedAt: string;
-}
-
-// Form Types
-export interface JobFormData {
-  url?: string;
-  description?: string;
-  title?: string;
-  company?: string;
-  location?: string;
-  jobType?: string;
-  workMode?: string;
-}
-
-export interface SearchFilters {
-  query: string;
-  jobType?: string;
-  workMode?: string;
-  status?: ApplicationStatus;
-  location?: string;
-}
-
-// Equipment Types
-export interface TennisEquipment {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-  condition: string;
-  category: string;
-  location: string;
-  brand?: string;
-  createdAt: string;
 }

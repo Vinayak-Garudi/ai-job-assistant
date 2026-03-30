@@ -27,7 +27,6 @@ components/
   ├── dashboard/            # DashboardStats, JobListClient, JobMatchCard, etc.
   ├── profile/              # BasicInfoEditor, SkillsEditor, ProfileForm, etc.
   ├── Navigation.tsx        # Async Server Component — top nav bar
-  ├── NavLinks.tsx          # "use client" — active link highlighting via usePathname
   └── UserMenu.tsx          # "use client" — user avatar dropdown (Popover-based)
 ```
 
@@ -93,7 +92,6 @@ components/
 ## 6. Navigation UI
 
 - **Top nav**: `Navigation.tsx` (Server Component) — reads auth headers to render conditionally
-- **Nav links**: `NavLinks.tsx` (`"use client"`) — uses `usePathname()` for active state styling
 - **User menu**: `UserMenu.tsx` (`"use client"`) — Popover-based dropdown with Profile + Logout
 - **Authenticated nav**: Dashboard link (NavLinks) + user icon with dropdown (UserMenu)
 - **Unauthenticated nav**: "Get Started" button linking to `/auth/signup`

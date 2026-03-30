@@ -65,8 +65,7 @@ components/
   ├── auth/                 # LoginForm, SignupForm (client components)
   ├── dashboard/            # DashboardStats, JobListClient, JobMatchCard, etc.
   ├── profile/              # BasicInfoEditor, SkillsEditor, etc.
-  ├── Navigation.tsx        # Async Server Component — reads x-is-authenticated header
-  └── NavLinks.tsx          # "use client" — usePathname for active link highlighting
+  ├── Navigation.tsx        # Async Server Component — reads
 lib/
   api.ts                    # Universal fetch wrapper (SSR + CSR, auto Bearer token)
   authHandler.ts            # Server-only: cookie deletion via next/headers
@@ -249,7 +248,6 @@ This allows the page shell to render immediately while data streams in.
 - **App Router**: All routes in `app/` directory
 - **Dynamic Routes**: Use `[param]` folders (e.g., `app/dashboard/job-match/[id]/page.tsx`)
 - **Navigation**: Use Next.js `<Link>` component for client-side navigation
-- **Active Links**: Use `usePathname()` in a `'use client'` component (see `NavLinks.tsx`)
 - **Unauthorized**: Redirect to `/unauthorized` when role check fails
 
 ### 10. Styling
