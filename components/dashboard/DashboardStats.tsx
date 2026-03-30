@@ -1,8 +1,6 @@
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Briefcase, TrendingUp, Star, CheckCircle } from "lucide-react";
-import type { JobMatchStats } from "@/app/dashboard/actions";
+import type { JobMatchStats } from "@/types";
 
 interface DashboardStatsProps {
   stats: JobMatchStats;

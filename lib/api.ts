@@ -63,7 +63,7 @@ export async function apiRequest(
       cookie.startsWith("user-token"),
     );
     if (userTokenCookie) {
-      token = userTokenCookie.split("=")[1];
+      token = userTokenCookie.split("=").slice(1).join("=");
     }
   }
 
@@ -75,7 +75,11 @@ export async function apiRequest(
   try {
     // Construct URL with query parameters if they exist
     if (!BASE_URL) {
-      return { data: null, message: "API URL is not configured", success: false };
+      return {
+        data: null,
+        message: "API URL is not configured",
+        success: false,
+      };
     }
     const url = new URL(endpoint, BASE_URL);
     if (params) {
@@ -96,8 +100,12 @@ export async function apiRequest(
     if (!response.ok) {
       // Handle 401 Unauthorized - trigger logout
       if (response.status === 401) {
-        if (typeof window !== "undefined") {
-          // Client-side: redirect to home after logout
+        if (typeof window === "undefined") {
+          // Server-side: use Next.js redirect (throws internally, exits the function)
+          const { redirect } = await import("next/navigation");
+          redirect("/auth/login");
+        } else {
+          // Client-side: expire cookies and hard-navigate home
           handleClientLogout();
           window.location.href = "/";
         }

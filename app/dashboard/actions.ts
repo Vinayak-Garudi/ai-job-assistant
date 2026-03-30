@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { JobMatch } from "@/types";
+import type { JobMatch, JobMatchStats, JobMatchesResult } from "@/types";
 import { apiRequest } from "@/lib/api";
 
 // Delete a job
@@ -30,18 +30,6 @@ export async function deleteJobMatch(id: string) {
 }
 
 // Fetch job match history from the API
-export interface JobMatchStats {
-  totalJobs: number;
-  avgMatch: number;
-  highMatches: number;
-  totalAnalyzed: number;
-}
-
-export interface JobMatchesResult {
-  jobs: JobMatch[];
-  stats: JobMatchStats;
-}
-
 export async function getJobMatches(): Promise<JobMatchesResult> {
   const response = await apiRequest("job-match/history");
   if (!response.success || !response.data) {

@@ -18,7 +18,7 @@ interface AnalysisData {
 }
 
 export default function AddJobForm() {
-  const [mode, setMode] = useState<"url" | "manual">("url");
+  const mode = "url"; // For now, we will only implement URL input mode. Manual entry can be added later.
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
@@ -70,7 +70,7 @@ export default function AddJobForm() {
     <>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Enter Job Postin URL</CardTitle>
+          <CardTitle>Enter Job Posting URL</CardTitle>
         </CardHeader>
         <CardContent>
           {/* <div className="flex gap-2 mb-6">

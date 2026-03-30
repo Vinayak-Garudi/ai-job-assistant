@@ -4,24 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, MapPin } from "lucide-react";
 import type { JobMatch } from "@/types";
 import JobMatchDeleteButton from "./JobMatchDeleteButton";
+import { getMatchColor, getMatchLabel } from "@/lib/utils";
 
 interface JobMatchCardProps {
   job: JobMatch;
   onDelete: () => void;
-}
-
-function getMatchColor(percentage: number) {
-  if (percentage >= 80)
-    return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-  if (percentage >= 60)
-    return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-  return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
-}
-
-function getMatchLabel(percentage: number) {
-  if (percentage >= 80) return "Excellent Match";
-  if (percentage >= 60) return "Good Match";
-  return "Needs Work";
 }
 
 export default function JobMatchCard({ job, onDelete }: JobMatchCardProps) {

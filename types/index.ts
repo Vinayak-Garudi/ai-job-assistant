@@ -86,3 +86,16 @@ export interface JobMatch {
   createdAt: string;
   updatedAt: string;
 }
+
+// Dashboard Stats Types
+export interface JobMatchStats {
+  totalJobs: number;
+  avgMatch: number;
+  highMatches: number;
+  totalAnalyzed: number;
+}
+
+export interface JobMatchesResult {
+  jobs: JobMatch[];
+  stats: JobMatchStats;
+}
