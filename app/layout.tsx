@@ -8,7 +8,6 @@ import Navigation from "@/components/Navigation";
 import { SidebarProvider } from "@/components/sidebar/SidebarContext";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { MainContent } from "@/components/sidebar/MainContent";
-import { headers } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +33,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headerStore = await headers();
-  const isAuthenticated = headerStore.get("x-is-authenticated") === "true";
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -47,9 +43,7 @@ export default async function RootLayout({
             <ThemeSwitcher />
             <Navigation />
             <Sidebar />
-            <MainContent isAuthenticated={isAuthenticated}>
-              {children}
-            </MainContent>
+            <MainContent>{children}</MainContent>
           </SidebarProvider>
           <Toaster />
         </ThemeProvider>

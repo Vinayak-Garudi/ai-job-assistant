@@ -56,7 +56,6 @@ function DashboardDataSkeleton() {
 export default function DashboardPage() {
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">
-      {/* Header — renders immediately */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold mb-2">Job Dashboard</h1>
@@ -64,15 +63,8 @@ export default function DashboardPage() {
             Track and manage your job applications
           </p>
         </div>
-        <Button asChild>
-          <Link href="/jobs/add">
-            <Plus className="h-4 w-4 mr-2" />
-            Analyse New Job
-          </Link>
-        </Button>
       </div>
 
-      {/* Data streams in via Suspense */}
       <Suspense fallback={<DashboardDataSkeleton />}>
         <DashboardData />
       </Suspense>
