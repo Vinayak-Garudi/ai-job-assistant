@@ -16,6 +16,7 @@ export interface UserProfile {
   education: Education;
   documents: Documents;
   jobPreferences: JobPreferences;
+  idealLinkedInProfile?: IdealLinkedInProfile;
 }
 
 export interface BasicInfo {
@@ -59,6 +60,25 @@ export interface JobPreferences {
   workModes: Array<"Remote" | "On-site" | "Hybrid">;
   preferredLocations: string[];
   desiredRoles: string[];
+}
+
+export interface LinkedInExperience {
+  title: string;
+  companyOrOrganization: string;
+  description: string;
+}
+
+export interface LinkedInProject {
+  title: string;
+  description: string;
+}
+
+export interface IdealLinkedInProfile {
+  intro: string;
+  about: string;
+  experience: LinkedInExperience[];
+  projects: LinkedInProject[];
+  additionalSections: unknown[];
 }
 
 // Job Match Types (from API)

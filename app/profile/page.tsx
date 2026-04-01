@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Linkedin } from "lucide-react";
 
 async function ProfileData() {
   const profile = await getUserProfile();
@@ -40,11 +43,19 @@ export default function ProfilePage() {
   return (
     <div className="container mx-auto py-8 px-4 max-w-6xl">
       {/* Header — renders immediately */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">User Profile</h1>
-        <p className="text-muted-foreground">
-          Manage your personal and professional information
-        </p>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">User Profile</h1>
+          <p className="text-muted-foreground">
+            Manage your personal and professional information
+          </p>
+        </div>
+        <Button asChild className="w-full sm:w-auto">
+          <Link href="/linkedin-recommendation">
+            <Linkedin className="h-4 w-4" />
+            LinkedIn Profile
+          </Link>
+        </Button>
       </div>
 
       {/* Profile form streams in via Suspense */}

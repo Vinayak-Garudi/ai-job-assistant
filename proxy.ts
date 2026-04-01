@@ -7,6 +7,7 @@ const protectedRoutes = {
   "/dashboard": ["admin", "user"],
   "/profile": ["admin", "user"],
   "/jobs": ["admin", "user"],
+  "/linkedin-recommendation": ["admin", "user"],
   // Add more routes and their allowed roles as needed
 };
 

@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   BrainCircuit,
   UserCircle,
+  Linkedin,
   Sun,
   Moon,
 } from "lucide-react";
@@ -16,6 +17,11 @@ import { useTheme } from "@/components/theme-provider";
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { href: "/jobs/add", label: "Analyse Job", Icon: BrainCircuit },
+  {
+    href: "/linkedin-recommendation",
+    label: "LinkedIn Profile",
+    Icon: Linkedin,
+  },
   { href: "/profile", label: "Profile", Icon: UserCircle },
 ];
 
