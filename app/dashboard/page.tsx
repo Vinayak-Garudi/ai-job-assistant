@@ -1,17 +1,23 @@
 import { Suspense } from "react";
-import { getJobMatches } from "./actions";
+import { getJobMatches, searchJobMatches } from "./actions";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import JobListClient from "@/components/dashboard/JobListClient";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-async function DashboardData() {
-  const { jobs, stats } = await getJobMatches();
+async function DashboardData({ page, query }: { page: number; query: string }) {
+  const { jobs, stats, pagination } = query
+    ? await searchJobMatches(query, page)
+    : await getJobMatches(page);
 
   return (
     <>
       <DashboardStats stats={stats} />
-      <JobListClient initialJobs={jobs} />
+      <JobListClient
+        initialJobs={jobs}
+        pagination={pagination}
+        initialQuery={query}
+      />
     </>
   );
 }
@@ -50,7 +56,15 @@ function DashboardDataSkeleton() {
   );
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; q?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page || "1", 10) || 1);
+  const query = params.q?.trim() || "";
+
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">
       <div className="flex justify-between items-center">
@@ -62,8 +76,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <Suspense fallback={<DashboardDataSkeleton />}>
-        <DashboardData />
+      <Suspense key={`${page}-${query}`} fallback={<DashboardDataSkeleton />}>
+        <DashboardData page={page} query={query} />
       </Suspense>
     </div>
   );

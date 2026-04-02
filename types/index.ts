@@ -115,7 +115,15 @@ export interface JobMatchStats {
   totalAnalyzed: number;
 }
 
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  pages: number;
+}
+
 export interface JobMatchesResult {
   jobs: JobMatch[];
   stats: JobMatchStats;
+  pagination: Pagination;
 }

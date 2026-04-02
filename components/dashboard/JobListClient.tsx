@@ -1,28 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import type { JobMatch } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Search, ChevronLeft, ChevronRight, X } from "lucide-react";
+import type { JobMatch, Pagination } from "@/types";
 import JobMatchCard from "./JobMatchCard";
 
 interface JobListClientProps {
   initialJobs: JobMatch[];
+  pagination: Pagination;
+  initialQuery?: string;
 }
 
-export default function JobListClient({ initialJobs }: JobListClientProps) {
+export default function JobListClient({
+  initialJobs,
+  pagination,
+  initialQuery = "",
+}: JobListClientProps) {
   const [jobs, setJobs] = useState(initialJobs);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const filteredJobs = jobs.filter((job) => {
-    if (!query) return true;
-    const q = query.toLowerCase();
-    return (
-      job.jobTitle.toLowerCase().includes(q) ||
-      job.company.toLowerCase().includes(q) ||
-      job.location.toLowerCase().includes(q)
-    );
-  });
+  // Sync jobs when server data changes (page/search navigation)
+  useEffect(() => {
+    setJobs(initialJobs);
+  }, [initialJobs]);
+
+  const navigate = (params: URLSearchParams) => {
+    router.push(`/dashboard?${params.toString()}`);
+  };
+
+  // Debounced server-side search
+  useEffect(() => {
+    // Skip on initial mount when query matches initialQuery
+    if (query === initialQuery) return;
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (query.trim()) {
+        params.set("q", query.trim());
+      }
+      params.set("page", "1");
+      navigate(params);
+    }, 400);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query]);
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(page));
+    navigate(params);
+  };
+
+  const clearSearch = () => {
+    setQuery("");
+    const params = new URLSearchParams();
+    params.set("page", "1");
+    navigate(params);
+  };
 
   return (
     <div className="space-y-4">
@@ -32,11 +75,19 @@ export default function JobListClient({ initialJobs }: JobListClientProps) {
           placeholder="Search by title, company, or location..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="pl-10"
+          className="pl-10 pr-10"
         />
+        {query && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
-      {filteredJobs.length === 0 ? (
+      {jobs.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           <p className="text-lg">No jobs found.</p>
           <p className="text-sm mt-2">
@@ -47,7 +98,7 @@ export default function JobListClient({ initialJobs }: JobListClientProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {filteredJobs.map((job) => (
+          {jobs.map((job) => (
             <JobMatchCard
               key={job.id || job._id}
               job={job}
@@ -58,6 +109,32 @@ export default function JobListClient({ initialJobs }: JobListClientProps) {
               }
             />
           ))}
+        </div>
+      )}
+
+      {pagination.pages > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={pagination.page <= 1}
+            onClick={() => goToPage(pagination.page - 1)}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          <span className="text-sm text-muted-foreground px-2">
+            Page {pagination.page} of {pagination.pages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={pagination.page >= pagination.pages}
+            onClick={() => goToPage(pagination.page + 1)}
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>

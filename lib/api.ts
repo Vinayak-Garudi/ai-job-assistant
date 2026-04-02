@@ -12,7 +12,9 @@ interface ApiError extends Error {
 
 type ApiResponse = {
   stats?: any;
-  data: any;
+  pagination?: any;
+  data?: any;
+  items?: any;
   message: string;
   success: boolean;
 };
