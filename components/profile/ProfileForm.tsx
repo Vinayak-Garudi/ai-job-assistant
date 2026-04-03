@@ -70,7 +70,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
 
   const updateProfessionalInfo = (
     field: keyof UserProfile["professionalInfo"],
-    value: string | number,
+    value: string | number | null,
   ) => {
     setProfile({
       ...profile,
@@ -270,7 +270,10 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
         {isEditing && (
           <Button
             variant="outline"
-            onClick={() => setIsEditing(false)}
+            onClick={() => {
+              setProfile(initialProfile);
+              setIsEditing(false);
+            }}
             disabled={isPending}
           >
             Cancel

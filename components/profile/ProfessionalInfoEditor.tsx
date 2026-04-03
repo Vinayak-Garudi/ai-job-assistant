@@ -1,6 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { UserProfile } from "@/types";
 
 interface ProfessionalInfoEditorProps {
@@ -8,7 +16,7 @@ interface ProfessionalInfoEditorProps {
   isEditing: boolean;
   onUpdate: (
     field: keyof UserProfile["professionalInfo"],
-    value: string | number,
+    value: string | number | null,
   ) => void;
 }
 
@@ -17,6 +25,12 @@ export function ProfessionalInfoEditor({
   isEditing,
   onUpdate,
 }: ProfessionalInfoEditorProps) {
+  const [ctcRevealed, setCtcRevealed] = useState(false);
+
+  useEffect(() => {
+    if (!isEditing) setCtcRevealed(false);
+  }, [isEditing]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="space-y-2">
@@ -81,6 +95,46 @@ export function ProfessionalInfoEditor({
           disabled={!isEditing}
           onChange={(e) => onUpdate("industry", e.target.value)}
         />
+      </div>
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Current Salary</label>
+        <div className="flex gap-2">
+          <Select
+            value={profile.professionalInfo.salaryCurrency ?? "INR"}
+            disabled={!isEditing}
+            onValueChange={(value) => onUpdate("salaryCurrency", value)}
+          >
+            <SelectTrigger className="w-24">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="INR">INR</SelectItem>
+              <SelectItem value="USD">USD</SelectItem>
+            </SelectContent>
+          </Select>
+          <Input
+            type={ctcRevealed ? "number" : "text"}
+            placeholder="Enter Current CTC per Annum"
+            min={0}
+            value={
+              !ctcRevealed && profile.professionalInfo.currentCTCPerAnum != null
+                ? "•".repeat(15)
+                : (profile.professionalInfo.currentCTCPerAnum ?? "")
+            }
+            disabled={!isEditing}
+            onChange={(e) => {
+              if (!ctcRevealed) {
+                setCtcRevealed(true);
+                onUpdate("currentCTCPerAnum", null);
+                return;
+              }
+              onUpdate(
+                "currentCTCPerAnum",
+                e.target.value === "" ? null : parseInt(e.target.value),
+              );
+            }}
+          />
+        </div>
       </div>
     </div>
   );

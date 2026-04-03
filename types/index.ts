@@ -32,6 +32,8 @@ export interface ProfessionalInfo {
   experienceYears: number;
   experienceMonths: number;
   industry: string;
+  currentCTCPerAnum?: number | null;
+  salaryCurrency: "INR" | "USD";
 }
 
 export interface OtherInfo {
