@@ -11,12 +11,7 @@ import {
 export default function Footer() {
   return (
     <footer className="relative">
-      <div
-        className={cn(
-          "mx-auto max-w-5xl lg:border-x",
-          "dark:bg-[radial-gradient(35%_80%_at_15%_0%,--theme(--color-foreground/.1),transparent)]",
-        )}
-      >
+      <div className={cn("mx-auto max-w-5xl lg:border-x")}>
         <div className="absolute inset-x-0 h-px w-full bg-border" />
         <div className="grid max-w-5xl grid-cols-6 gap-6 p-4">
           <div className="col-span-6 flex flex-col gap-4 pt-5 md:col-span-4">

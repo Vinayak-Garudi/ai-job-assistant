@@ -33,7 +33,6 @@ export default function Hero() {
       <div
         className={cn(
           "relative mx-auto max-w-5xl border-y px-6 py-20 md:px-12",
-          "dark:bg-[radial-gradient(35%_80%_at_25%_0%,var(--color-foreground)/.06,transparent)]",
         )}
       >
         {/* Vertical side borders */}

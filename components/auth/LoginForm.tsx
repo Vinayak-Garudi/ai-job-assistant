@@ -53,21 +53,24 @@ export function LoginForm() {
   }, []);
 
   // Animate step transitions
-  const animateStepIn = useCallback((ref: React.RefObject<HTMLDivElement | null>) => {
-    if (!ref.current) return;
-    const els = ref.current.querySelectorAll("[data-animate]");
-    gsap.fromTo(
-      els,
-      { opacity: 0, y: 14 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        stagger: 0.06,
-        ease: "power2.out",
-      },
-    );
-  }, []);
+  const animateStepIn = useCallback(
+    (ref: React.RefObject<HTMLDivElement | null>) => {
+      if (!ref.current) return;
+      const els = ref.current.querySelectorAll("[data-animate]");
+      gsap.fromTo(
+        els,
+        { opacity: 0, y: 14 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.06,
+          ease: "power2.out",
+        },
+      );
+    },
+    [],
+  );
 
   const goToDetails = () => {
     if (!email.trim()) {
@@ -155,7 +158,6 @@ export function LoginForm() {
         ref={containerRef}
         className={cn(
           "relative flex w-full max-w-sm flex-col justify-between p-6 md:p-8",
-          "dark:bg-[radial-gradient(50%_80%_at_20%_0%,var(--color-foreground)/.1,transparent)]",
         )}
       >
         {/* Border lines */}
@@ -301,10 +303,7 @@ export function LoginForm() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <div className="space-y-2" data-animate>
-                  <label
-                    htmlFor="username"
-                    className="text-sm font-medium"
-                  >
+                  <label htmlFor="username" className="text-sm font-medium">
                     Username
                   </label>
                   <Input
@@ -371,11 +370,7 @@ export function LoginForm() {
               )}
 
               <div data-animate>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={isLoading}
-                >
+                <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading
                     ? mode === "login"
                       ? "Signing In..."
