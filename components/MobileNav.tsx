@@ -2,11 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import React from "react";
-// import { Portal, PortalBackdrop } from "@/components/ui/portal";
 import { Button } from "@/components/ui/button";
 import { navLinks } from "./Header";
-import { XIcon, MenuIcon } from "lucide-react";
+import { XIcon, MenuIcon, SunIcon, MoonIcon } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "./theme-provider";
 
 export function MobileNav({
   isAuthenticated,
@@ -16,9 +16,25 @@ export function MobileNav({
   onLogout: () => void;
 }) {
   const [open, setOpen] = React.useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden flex items-center gap-2">
+      {/* Theme Toggle */}
+      <Button
+        size="icon-sm"
+        variant="ghost"
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
+        className="text-muted-foreground hover:text-foreground"
+      >
+        {theme === "dark" ? (
+          <SunIcon className="size-4" />
+        ) : (
+          <MoonIcon className="size-4" />
+        )}
+      </Button>
+
       <Button onClick={() => setOpen(!open)} size="icon" variant="outline">
         {open ? (
           <XIcon className="size-4.5" />
@@ -28,9 +44,7 @@ export function MobileNav({
       </Button>
 
       {open && (
-        // <Portal className="top-16">
-        //   <PortalBackdrop />
-        <div className="p-4 space-y-6 bg-background min-h-screen">
+        <div className="absolute top-16 left-0 right-0 p-4 space-y-6 bg-background min-h-screen border-t">
           {!isAuthenticated && (
             <div className="grid gap-2">
               {navLinks.map((link) => (
@@ -53,14 +67,13 @@ export function MobileNav({
                     Sign In
                   </Button>
                 </Link>
-                <Link href="/auth/signup">
+                <Link href="/auth/login">
                   <Button className="w-full">Get Started</Button>
                 </Link>
               </>
             )}
           </div>
         </div>
-        // </Portal>
       )}
     </div>
   );

@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Sparkles, SunIcon, MoonIcon } from "lucide-react";
 import { MobileNav } from "./MobileNav";
 import { SidebarToggle } from "./sidebar/SidebarToggle";
 import { UserMenu } from "./UserMenu";
+import { useTheme } from "./theme-provider";
 
 export const navLinks = [
   { label: "Features", href: "#" },
@@ -23,6 +24,7 @@ export default function Header({
   onLogout: () => void;
 }) {
   const scrolled = useScroll(10);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header
@@ -57,6 +59,21 @@ export default function Header({
             </div>
           )}
 
+          {/* Theme Toggle */}
+          <Button
+            size="icon-sm"
+            variant="ghost"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            {theme === "dark" ? (
+              <SunIcon className="size-4" />
+            ) : (
+              <MoonIcon className="size-4" />
+            )}
+          </Button>
+
           {isAuthenticated ? (
             <UserMenu onLogout={onLogout} />
           ) : (
@@ -66,7 +83,7 @@ export default function Header({
                   Sign In
                 </Button>
               </Link>
-              <Link href="/auth/signup">
+              <Link href="/auth/login">
                 <Button size="sm">Get Started</Button>
               </Link>
             </>
