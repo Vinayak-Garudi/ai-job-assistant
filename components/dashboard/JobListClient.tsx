@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, X, Loader2 } from "lucide-react";
 import type { JobMatch, Pagination } from "@/types";
 import JobMatchCard from "./JobMatchCard";
+import {
+  getJobMatches,
+  searchJobMatches,
+} from "@/app/dashboard/actions";
 
 interface JobListClientProps {
   initialJobs: JobMatch[];
@@ -16,37 +19,41 @@ interface JobListClientProps {
 
 export default function JobListClient({
   initialJobs,
-  pagination,
+  pagination: initialPagination,
   initialQuery = "",
 }: JobListClientProps) {
   const [jobs, setJobs] = useState(initialJobs);
+  const [pagination, setPagination] = useState(initialPagination);
   const [query, setQuery] = useState(initialQuery);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Sync jobs when server data changes (page/search navigation)
-  useEffect(() => {
-    setJobs(initialJobs);
-  }, [initialJobs]);
+  const fetchJobs = async (searchQuery: string, page: number) => {
+    setIsLoading(true);
+    try {
+      const result = searchQuery.trim()
+        ? await searchJobMatches(searchQuery.trim(), page)
+        : await getJobMatches(page);
+      setJobs(result.jobs);
+      setPagination(result.pagination);
 
-  const navigate = (params: URLSearchParams) => {
-    router.push(`/dashboard?${params.toString()}`);
+      const params = new URLSearchParams();
+      if (searchQuery.trim()) params.set("q", searchQuery.trim());
+      if (page > 1) params.set("page", String(page));
+      const qs = params.toString();
+      window.history.replaceState(null, "", `/dashboard${qs ? `?${qs}` : ""}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Debounced server-side search
+  // Debounced search — only fires when user changes the query
   useEffect(() => {
-    // Skip on initial mount when query matches initialQuery
     if (query === initialQuery) return;
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      const params = new URLSearchParams();
-      if (query.trim()) {
-        params.set("q", query.trim());
-      }
-      params.set("page", "1");
-      navigate(params);
+      fetchJobs(query, 1);
     }, 400);
 
     return () => {
@@ -55,16 +62,12 @@ export default function JobListClient({
   }, [query]);
 
   const goToPage = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(page));
-    navigate(params);
+    fetchJobs(query, page);
   };
 
   const clearSearch = () => {
     setQuery("");
-    const params = new URLSearchParams();
-    params.set("page", "1");
-    navigate(params);
+    fetchJobs("", 1);
   };
 
   return (
