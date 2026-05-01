@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -25,11 +25,7 @@ export function ProfessionalInfoEditor({
   isEditing,
   onUpdate,
 }: ProfessionalInfoEditorProps) {
-  const [ctcRevealed, setCtcRevealed] = useState(false);
 
-  useEffect(() => {
-    if (!isEditing) setCtcRevealed(false);
-  }, [isEditing]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -97,7 +93,7 @@ export function ProfessionalInfoEditor({
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Current Salary</label>
+        <label className="text-sm font-medium">Current CTC per Annum</label>
         <div className="flex gap-2">
           <Select
             value={profile.professionalInfo.salaryCurrency ?? "INR"}
@@ -113,26 +109,17 @@ export function ProfessionalInfoEditor({
             </SelectContent>
           </Select>
           <Input
-            type={ctcRevealed ? "number" : "text"}
+            type="number"
             placeholder="Enter Current CTC per Annum"
             min={0}
-            value={
-              !ctcRevealed && profile.professionalInfo.currentCTCPerAnum != null
-                ? "•".repeat(15)
-                : (profile.professionalInfo.currentCTCPerAnum ?? "")
-            }
+            value={profile.professionalInfo.currentCTCPerAnum ?? ""}
             disabled={!isEditing}
-            onChange={(e) => {
-              if (!ctcRevealed) {
-                setCtcRevealed(true);
-                onUpdate("currentCTCPerAnum", null);
-                return;
-              }
+            onChange={(e) =>
               onUpdate(
                 "currentCTCPerAnum",
                 e.target.value === "" ? null : parseInt(e.target.value),
-              );
-            }}
+              )
+            }
           />
         </div>
       </div>
