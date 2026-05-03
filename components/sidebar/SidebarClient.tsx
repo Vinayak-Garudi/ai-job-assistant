@@ -8,6 +8,7 @@ import {
   UserCircle,
   Linkedin,
   TrendingUp,
+  FileText,
   Sun,
   Moon,
 } from "lucide-react";
@@ -22,6 +23,11 @@ const navLinks = [
     href: "/linkedin-recommendation",
     label: "LinkedIn Profile",
     Icon: Linkedin,
+  },
+  {
+    href: "/resume-recommendation",
+    label: "Resume",
+    Icon: FileText,
   },
   {
     href: "/salary-estimate",

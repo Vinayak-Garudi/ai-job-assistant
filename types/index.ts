@@ -17,6 +17,7 @@ export interface UserProfile {
   documents: Documents;
   jobPreferences: JobPreferences;
   idealLinkedInProfile?: IdealLinkedInProfile;
+  idealResume?: IdealResume;
   salaryEstimate?: SalaryEstimate;
 }
 
@@ -82,6 +83,47 @@ export interface IdealLinkedInProfile {
   experience: LinkedInExperience[];
   projects: LinkedInProject[];
   additionalSections: unknown[];
+}
+
+export interface ResumeExperience {
+  title: string;
+  company: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  bullets: string[];
+}
+
+export interface ResumeEducation {
+  degree: string;
+  institution: string;
+  location: string;
+  graduationYear: string;
+  details: string;
+}
+
+export interface ResumeProject {
+  title: string;
+  technologies: string[];
+  description: string;
+  bullets: string[];
+}
+
+export interface ResumeSkills {
+  technical: string[];
+  soft: string[];
+  tools: string[];
+}
+
+export interface IdealResume {
+  professionalSummary: string;
+  skills: ResumeSkills;
+  experience: ResumeExperience[];
+  education: ResumeEducation[];
+  projects: ResumeProject[];
+  freelanceProjects: unknown[];
+  certifications: unknown[];
+  generatedAt: string | Date;
 }
 
 export interface SalaryEstimate {
