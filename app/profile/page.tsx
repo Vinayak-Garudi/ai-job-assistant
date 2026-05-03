@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Linkedin } from "lucide-react";
+import { LucideLinkedin, TrendingUp } from "lucide-react";
 
 async function ProfileData() {
   const profile = await getUserProfile();
@@ -50,12 +50,20 @@ export default function ProfilePage() {
             Manage your personal and professional information
           </p>
         </div>
-        <Button asChild className="w-full sm:w-auto">
-          <Link href="/linkedin-recommendation">
-            <Linkedin className="h-4 w-4" />
-            LinkedIn Profile
-          </Link>
-        </Button>
+        <div className="flex sm:flex-row gap-3 sm:items-center">
+          <Button asChild variant="outline" className="w-full sm:w-auto">
+            <Link href="/salary-estimate">
+              <TrendingUp className="h-4 w-4" />
+              Salary Estimate
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full sm:w-auto">
+            <Link href="/linkedin-recommendation">
+              <LucideLinkedin className="h-4 w-4" />
+              LinkedIn Profile
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Profile form streams in via Suspense */}
