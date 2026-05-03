@@ -50,14 +50,14 @@ export default function ProfilePage() {
             Manage your personal and professional information
           </p>
         </div>
-        <div className="flex sm:flex-row gap-3 sm:items-center">
-          <Button asChild variant="outline" className="w-full sm:w-auto">
+        <div className="flex gap-3 items-center">
+          <Button asChild variant="outline">
             <Link href="/salary-estimate">
               <TrendingUp className="h-4 w-4" />
               Salary Estimate
             </Link>
           </Button>
-          <Button asChild variant="outline" className="w-full sm:w-auto">
+          <Button asChild variant="outline">
             <Link href="/linkedin-recommendation">
               <LucideLinkedin className="h-4 w-4" />
               LinkedIn Profile
