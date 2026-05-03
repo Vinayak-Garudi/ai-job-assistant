@@ -9,6 +9,7 @@ import {
   Linkedin,
   TrendingUp,
   FileText,
+  Sparkles,
   Sun,
   Moon,
 } from "lucide-react";
@@ -18,6 +19,11 @@ import { useTheme } from "@/components/theme-provider";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  {
+    href: "/job-specific-details",
+    label: "Job-Specific Details",
+    Icon: Sparkles,
+  },
   { href: "/jobs/add", label: "Analyse Job", Icon: BrainCircuit },
   {
     href: "/linkedin-recommendation",

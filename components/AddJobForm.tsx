@@ -1,32 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
-import JobAnalysisResult from "./JobAnalysisResult";
-
-interface AnalysisData {
-  matchingPercentage: number;
-  strengths: string[];
-  areasToImprove: string[];
-  detailedAnalysis: string;
-  analyzedAt: string;
-  invalidURL?: boolean;
-  resumeFeedback: string[];
-}
 
 export default function AddJobForm() {
+  const router = useRouter();
   const mode = "url"; // For now, we will only implement URL input mode. Manual entry can be added later.
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
   const [company, setCompany] = useState("");
   const [location, setLocation] = useState("");
-  const [analysisResult, setAnalysisResult] = useState<AnalysisData | null>(
-    null,
-  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +22,6 @@ export default function AddJobForm() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    setAnalysisResult(null);
 
     if (mode === "url") {
       try {
@@ -46,8 +33,8 @@ export default function AddJobForm() {
           body: JSON.stringify({ jobUrl: url }),
         });
 
-        if (response.success && response.data?.analysis) {
-          setAnalysisResult(response.data.analysis);
+        if (response.success && response.data?._id) {
+          router.push(`/dashboard/job-match/${response.data._id}`);
         } else {
           setError(
             response.message || "Failed to analyze job. Please try again.",
@@ -186,9 +173,6 @@ export default function AddJobForm() {
         </CardContent>
       </Card>
 
-      {analysisResult && (
-        <JobAnalysisResult analysis={analysisResult} jobUrl={url} />
-      )}
     </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
   AlertCircle,
   FileText,
   RefreshCw,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiRequest } from "@/lib/api";
@@ -27,7 +29,14 @@ export default function JobMatchDetailClient({
 }: JobMatchDetailClientProps) {
   const [analysis, setAnalysis] = useState<JobMatchAnalysis>(job.analysis);
   const [reanalyzing, setReanalyzing] = useState(false);
+  const [fetchingDetails, setFetchingDetails] = useState(false);
   const id = job._id ?? job.id;
+
+  const hasJobSpecificDetails =
+    analysis.jobSpecificMessage ||
+    analysis.jobSpecificEmail ||
+    (analysis.jobSpecificInterviewQuestions?.length ?? 0) > 0 ||
+    (analysis.jobSpecificTips?.length ?? 0) > 0;
 
   async function handleReanalyze() {
     setReanalyzing(true);
@@ -45,6 +54,28 @@ export default function JobMatchDetailClient({
       toast.error("Reanalysis failed. Please try again.");
     } finally {
       setReanalyzing(false);
+    }
+  }
+
+  async function handleGetJobSpecificDetails() {
+    setFetchingDetails(true);
+    try {
+      const response = await apiRequest(
+        `job-match/get-job-specific-details/${id}`,
+        { method: "GET" },
+      );
+      if (response.success && response.data?.analysis) {
+        setAnalysis(response.data.analysis);
+        toast.success("Job-specific details generated");
+      } else {
+        toast.error(
+          response.message || "Failed to generate details. Please try again.",
+        );
+      }
+    } catch {
+      toast.error("Failed to generate details. Please try again.");
+    } finally {
+      setFetchingDetails(false);
     }
   }
 
@@ -72,7 +103,7 @@ export default function JobMatchDetailClient({
             {analysis.matchingPercentage}% —{" "}
             {getMatchLabel(analysis.matchingPercentage)}
           </Badge>
-          <div className="flex justify-start gap-2">
+          <div className="flex flex-wrap justify-start gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -85,6 +116,27 @@ export default function JobMatchDetailClient({
               />
               {reanalyzing ? "Analyzing…" : "Reanalyze"}
             </Button>
+            {!hasJobSpecificDetails ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                onClick={handleGetJobSpecificDetails}
+                disabled={fetchingDetails}
+              >
+                <Sparkles
+                  className={`h-3.5 w-3.5 ${fetchingDetails ? "animate-pulse" : ""}`}
+                />
+                {fetchingDetails ? "Generating…" : "Get Job-Specific Details"}
+              </Button>
+            ) : (
+              <Link href={`/job-specific-details/${id}`}>
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  View Job-Specific Details
+                </Button>
+              </Link>
+            )}
             <a
               href={job.jobUrl}
               target="_blank"

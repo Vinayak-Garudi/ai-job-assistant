@@ -143,6 +143,10 @@ export interface JobMatchAnalysis {
   resumeFeedback: string[];
   detailedAnalysis: string;
   analyzedAt: string;
+  jobSpecificMessage?: string;
+  jobSpecificEmail?: string;
+  jobSpecificInterviewQuestions?: string[];
+  jobSpecificTips?: string[];
 }
 
 export interface JobMatch {
