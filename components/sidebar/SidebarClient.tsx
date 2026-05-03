@@ -7,6 +7,7 @@ import {
   BrainCircuit,
   UserCircle,
   Linkedin,
+  TrendingUp,
   Sun,
   Moon,
 } from "lucide-react";
@@ -21,6 +22,11 @@ const navLinks = [
     href: "/linkedin-recommendation",
     label: "LinkedIn Profile",
     Icon: Linkedin,
+  },
+  {
+    href: "/salary-estimate",
+    label: "Salary Estimate",
+    Icon: TrendingUp,
   },
   { href: "/profile", label: "Profile", Icon: UserCircle },
 ];

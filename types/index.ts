@@ -17,6 +17,7 @@ export interface UserProfile {
   documents: Documents;
   jobPreferences: JobPreferences;
   idealLinkedInProfile?: IdealLinkedInProfile;
+  salaryEstimate?: SalaryEstimate;
 }
 
 export interface BasicInfo {
@@ -81,6 +82,15 @@ export interface IdealLinkedInProfile {
   experience: LinkedInExperience[];
   projects: LinkedInProject[];
   additionalSections: unknown[];
+}
+
+export interface SalaryEstimate {
+  minSalary: number;
+  maxSalary: number;
+  currency: string;
+  rationale: string;
+  marketInsights: string;
+  generatedAt: string | Date;
 }
 
 // Job Match Types (from API)
