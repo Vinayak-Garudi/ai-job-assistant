@@ -12,6 +12,7 @@ import {
   Sparkles,
   Sun,
   Moon,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "./SidebarContext";
@@ -19,6 +20,7 @@ import { useTheme } from "@/components/theme-provider";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { href: "/job-search", label: "Job Search", Icon: Search },
   {
     href: "/job-specific-details",
     label: "Job-Specific Details",

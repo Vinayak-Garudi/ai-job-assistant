@@ -185,3 +185,48 @@ export interface JobMatchesResult {
   stats: JobMatchStats;
   pagination: Pagination;
 }
+
+// Job Search Types (from job-search API)
+export interface JobHighlights {
+  qualifications: string[];
+  responsibilities: string[];
+  benefits: string[];
+}
+
+export interface JobSalary {
+  min: number | null;
+  max: number | null;
+  currency: string;
+  period: string | null;
+}
+
+export interface JobSearchItem {
+  jobId: string | null;
+  jobTitle: string;
+  company: string;
+  companyLogo: string | null;
+  companyWebsite: string | null;
+  location: string;
+  isRemote: boolean;
+  employmentType: string | null;
+  jobUrl: string | null;
+  jobDescription: string;
+  highlights: JobHighlights;
+  salary: JobSalary | null;
+  postedAt: string | null;
+  source: string;
+  relevanceScore: number;
+}
+
+export interface JobSearchPagination {
+  page: number;
+  limit: number;
+  count: number;
+}
+
+export interface JobSearchResult {
+  query: string;
+  location: string | null;
+  jobs: JobSearchItem[];
+  pagination: JobSearchPagination;
+}
