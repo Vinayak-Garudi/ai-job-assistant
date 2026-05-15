@@ -20,6 +20,14 @@ import {
 import { cn } from "@/lib/utils";
 import type { JobSearchItem } from "@/types";
 
+const SALARY_PERIOD_LABEL: Record<string, string> = {
+  HOUR: "/hr",
+  DAY: "/day",
+  WEEK: "/wk",
+  MONTH: "/mo",
+  YEAR: "/yr",
+};
+
 const DATE_OPTIONS = [
   { value: "all", label: "Any time" },
   { value: "today", label: "Today" },
@@ -151,7 +159,10 @@ function JobCard({
           {salaryLabel && (
             <Badge variant="outline" className="text-xs">
               {salaryLabel}
-              {job.salary?.period ? `/${job.salary.period}` : ""}
+              {job.salary?.period
+                ? (SALARY_PERIOD_LABEL[job.salary.period] ??
+                  `/${job.salary.period.toLowerCase()}`)
+                : ""}
             </Badge>
           )}
         </div>
