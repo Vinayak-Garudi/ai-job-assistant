@@ -2,22 +2,14 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getLinkedInProfile } from "./actions";
 import LinkedInRecommendationLoading from "./loading";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, FolderOpen, User, FileText } from "lucide-react";
+import { Briefcase, FolderOpen, User, FileText, Link2 } from "lucide-react";
 
 async function LinkedInProfileData() {
   const { profile, username } = await getLinkedInProfile();
 
-  if (!profile) {
-    redirect("/profile");
-  }
+  if (!profile) redirect("/profile");
 
   const hasIntro = profile.intro?.trim();
   const hasAbout = profile.about?.trim();
@@ -27,15 +19,14 @@ async function LinkedInProfileData() {
 
   if (isEmpty) {
     return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <h3 className="text-lg font-semibold mb-2">
-            No LinkedIn Profile Data Yet
-          </h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            Your ideal LinkedIn profile hasn&apos;t been generated yet. Complete
-            your profile and job analysis to get personalized LinkedIn
-            recommendations.
+      <Card className="border-dashed">
+        <CardContent className="py-14 text-center space-y-3">
+          <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center mx-auto">
+            <Link2 className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <h3 className="font-semibold">No recommendations yet</h3>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            Complete your profile and add job analyses to get personalised LinkedIn profile recommendations.
           </p>
         </CardContent>
       </Card>
@@ -43,73 +34,86 @@ async function LinkedInProfileData() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Intro Section */}
+    <div className="space-y-5">
       {hasIntro && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <User className="h-5 w-5" />
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <User className="h-4 w-4 text-primary" />
               Headline / Intro
             </CardTitle>
             {username && (
-              <CardDescription>
-                Recommended intro for {username}
-              </CardDescription>
+              <CardDescription>Recommended intro for {username}</CardDescription>
             )}
           </CardHeader>
           <CardContent>
-            <p className="text-foreground leading-relaxed">{profile.intro}</p>
+            <p className="text-sm leading-relaxed">{profile.intro}</p>
           </CardContent>
         </Card>
       )}
 
-      {/* About Section */}
       {hasAbout && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <FileText className="h-5 w-5" />
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <FileText className="h-4 w-4 text-primary" />
               About
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-foreground leading-relaxed whitespace-pre-line">
-              {profile.about}
-            </p>
+            <p className="text-sm leading-relaxed whitespace-pre-line">{profile.about}</p>
           </CardContent>
         </Card>
       )}
 
-      {/* Experience Section */}
       {hasExperience && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Briefcase className="h-5 w-5" />
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Briefcase className="h-4 w-4 text-primary" />
               Experience
             </CardTitle>
             <CardDescription>
-              {profile.experience.length} recommended{" "}
-              {profile.experience.length === 1 ? "entry" : "entries"}
+              {profile.experience.length} recommended {profile.experience.length === 1 ? "entry" : "entries"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
+            <div className="space-y-5">
               {profile.experience.map((exp, index) => (
-                <div
-                  key={index}
-                  className="relative pl-6 border-l-2 border-border"
-                >
-                  <h4 className="font-semibold text-foreground">{exp.title}</h4>
+                <div key={index} className="relative pl-5 border-l-2 border-primary/30">
+                  <h4 className="font-semibold text-sm">{exp.title}</h4>
                   {exp.companyOrOrganization && (
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {exp.companyOrOrganization}
-                    </p>
+                    <p className="text-xs text-muted-foreground mb-2">{exp.companyOrOrganization}</p>
                   )}
                   {exp.description && (
-                    <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-line">
-                      {exp.description}
+                    <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-line">{exp.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {hasProjects && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <FolderOpen className="h-4 w-4 text-primary" />
+              Projects
+            </CardTitle>
+            <CardDescription>
+              {profile.projects.length} recommended {profile.projects.length === 1 ? "project" : "projects"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {profile.projects.map((project, index) => (
+                <div key={index} className="rounded-xl bg-muted/50 p-4 border border-border">
+                  <h4 className="font-semibold text-sm mb-2">{project.title}</h4>
+                  {project.description && (
+                    <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {project.description}
                     </p>
                   )}
                 </div>
@@ -119,53 +123,16 @@ async function LinkedInProfileData() {
         </Card>
       )}
 
-      {/* Projects Section */}
-      {hasProjects && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <FolderOpen className="h-5 w-5" />
-              Projects
-            </CardTitle>
-            <CardDescription>
-              {profile.projects.length} recommended{" "}
-              {profile.projects.length === 1 ? "project" : "projects"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {profile.projects.map((project, index) => (
-                <Card key={index} className="bg-muted/50">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">{project.title}</CardTitle>
-                  </CardHeader>
-                  {project.description && (
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {project.description}
-                      </p>
-                    </CardContent>
-                  )}
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Additional Sections */}
       {profile.additionalSections && profile.additionalSections.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Additional Sections</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Additional Sections</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {profile.additionalSections.map((section, index) => (
                 <Badge key={index} variant="secondary">
-                  {typeof section === "string"
-                    ? section
-                    : JSON.stringify(section)}
+                  {typeof section === "string" ? section : JSON.stringify(section)}
                 </Badge>
               ))}
             </div>
@@ -178,14 +145,15 @@ async function LinkedInProfileData() {
 
 export default function LinkedInRecommendationPage() {
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
+    <div className="container mx-auto py-8 px-4 max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-          Ideal LinkedIn Profile
-        </h1>
-        <p className="text-muted-foreground">
-          Your personalized LinkedIn profile recommendations based on your
-          experience and skills
+        <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-3">
+          <Link2 className="h-3.5 w-3.5" />
+          LinkedIn
+        </div>
+        <h1 className="text-2xl font-bold mb-1.5">Ideal LinkedIn Profile</h1>
+        <p className="text-sm text-muted-foreground">
+          Your personalised LinkedIn profile recommendations based on your experience and skills.
         </p>
       </div>
 

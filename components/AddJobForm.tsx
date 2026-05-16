@@ -4,17 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
+import { Link2, Sparkles, AlertCircle } from "lucide-react";
 
 export default function AddJobForm() {
   const router = useRouter();
-  const mode = "url"; // For now, we will only implement URL input mode. Manual entry can be added later.
   const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
-  const [title, setTitle] = useState("");
-  const [company, setCompany] = useState("");
-  const [location, setLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,156 +18,81 @@ export default function AddJobForm() {
     setIsLoading(true);
     setError(null);
 
-    if (mode === "url") {
-      try {
-        const response = await apiRequest("job-match/analyze-url", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ jobUrl: url }),
-        });
+    try {
+      const response = await apiRequest("job-match/analyze-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobUrl: url }),
+      });
 
-        if (response.success && response.data?._id) {
-          router.push(`/dashboard/job-match/${response.data._id}`);
-        } else {
-          setError(
-            response.message || "Failed to analyze job. Please try again.",
-          );
-        }
-      } catch (err) {
-        console.error("Error analyzing job:", err);
-        setError(
-          "An error occurred while analyzing the job. Please try again.",
-        );
-      } finally {
-        setIsLoading(false);
+      if (response.success && response.data?._id) {
+        router.push(`/dashboard/job-match/${response.data._id}`);
+      } else {
+        setError(response.message || "Failed to analyze job. Please try again.");
       }
-    } else {
+    } catch {
+      setError("An error occurred while analyzing the job. Please try again.");
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Enter Job Posting URL</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* <div className="flex gap-2 mb-6">
-          <Button
-            type="button"
-            variant={mode === "url" ? "default" : "outline"}
-            onClick={() => setMode("url")}
-            className="flex-1"
-          >
-            From URL
-          </Button>
-          <Button
-            type="button"
-            variant={mode === "manual" ? "default" : "outline"}
-            onClick={() => setMode("manual")}
-            className="flex-1"
-          >
-            Manual Entry
-          </Button>
-        </div> */}
+    <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+          <Link2 className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <p className="font-semibold">Paste a job URL</p>
+          <p className="text-sm text-muted-foreground">Works with LinkedIn, Indeed, Glassdoor, and any job board</p>
+        </div>
+      </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {mode === "url" ? (
-              <div className="space-y-2">
-                {/* <label htmlFor="url" className="text-sm font-medium">
-                  Job Posting URL
-                </label> */}
-                <Input
-                  id="url"
-                  type="url"
-                  placeholder="https://example.com/job-posting"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  required
-                />
-                <p className="text-xs text-muted-foreground">
-                  Paste a link from LinkedIn, Indeed, or any job board
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="space-y-2">
-                  <label htmlFor="title" className="text-sm font-medium">
-                    Job Title
-                  </label>
-                  <Input
-                    id="title"
-                    type="text"
-                    placeholder="e.g., Senior Software Engineer"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="company" className="text-sm font-medium">
-                    Company
-                  </label>
-                  <Input
-                    id="company"
-                    type="text"
-                    placeholder="e.g., Tech Corp"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="location" className="text-sm font-medium">
-                    Location
-                  </label>
-                  <Input
-                    id="location"
-                    type="text"
-                    placeholder="e.g., San Francisco, CA"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="description" className="text-sm font-medium">
-                    Job Description
-                  </label>
-                  <textarea
-                    id="description"
-                    className="flex min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="Paste the full job description here..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Include requirements, responsibilities, and any other
-                    relevant details
-                  </p>
-                </div>
-              </>
-            )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          id="url"
+          type="url"
+          placeholder="https://www.linkedin.com/jobs/view/…"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          required
+          disabled={isLoading}
+          className="h-12 rounded-xl text-base"
+        />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Analyzing..." : "Analyze with AI"}
-            </Button>
+        <Button
+          type="submit"
+          className="w-full h-12 text-base rounded-xl font-semibold"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <div className="h-4 w-4 rounded-full border-2 border-primary-foreground border-t-transparent animate-spin mr-2" />
+              Analysing with AI…
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-4 w-4 mr-2" />
+              Analyse with AI
+            </>
+          )}
+        </Button>
+      </form>
 
-            {error && (
-              <div className="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                <p className="text-sm text-red-600 dark:text-red-400">
-                  {error}
-                </p>
-              </div>
-            )}
-          </form>
-        </CardContent>
-      </Card>
+      {error && (
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400">
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
 
-    </>
+      {isLoading && (
+        <div className="rounded-xl bg-primary/5 border border-primary/10 p-4 text-sm text-muted-foreground text-center">
+          <Sparkles className="h-4 w-4 inline mr-1.5 text-primary animate-pulse" />
+          AI is reading the job posting and matching it to your profile…
+        </div>
+      )}
+    </div>
   );
 }

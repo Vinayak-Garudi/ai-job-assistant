@@ -6,19 +6,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LucideLinkedin, TrendingUp } from "lucide-react";
+import { TrendingUp, Link2, UserCircle } from "lucide-react";
 
 async function ProfileData() {
   const profile = await getUserProfile();
-  if (!profile) {
-    redirect("/auth/login");
-  }
+  if (!profile) redirect("/auth/login");
   return <ProfileForm initialProfile={profile} />;
 }
 
 function ProfileFormSkeleton() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {Array.from({ length: 4 }).map((_, i) => (
         <Card key={i}>
           <CardHeader className="space-y-2">
@@ -41,32 +39,34 @@ function ProfileFormSkeleton() {
 
 export default function ProfilePage() {
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
-      {/* Header — renders immediately */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="container mx-auto py-8 px-4 max-w-5xl">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">User Profile</h1>
-          <p className="text-muted-foreground">
-            Manage your personal and professional information
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-widest mb-3">
+            <UserCircle className="h-3.5 w-3.5" />
+            Profile
+          </div>
+          <h1 className="text-2xl font-bold mb-1">Your Profile</h1>
+          <p className="text-sm text-muted-foreground">
+            Keep this up to date for better AI analysis and salary estimates.
           </p>
         </div>
-        <div className="flex gap-3 items-center">
-          <Button asChild variant="outline">
+        <div className="flex gap-2 flex-wrap">
+          <Button asChild variant="outline" size="sm" className="rounded-lg gap-1.5">
             <Link href="/salary-estimate">
-              <TrendingUp className="h-4 w-4" />
+              <TrendingUp className="h-3.5 w-3.5" />
               Salary Estimate
             </Link>
           </Button>
-          <Button asChild variant="outline">
+          <Button asChild variant="outline" size="sm" className="rounded-lg gap-1.5">
             <Link href="/linkedin-recommendation">
-              <LucideLinkedin className="h-4 w-4" />
+              <Link2 className="h-3.5 w-3.5" />
               LinkedIn Profile
             </Link>
           </Button>
         </div>
       </div>
 
-      {/* Profile form streams in via Suspense */}
       <Suspense fallback={<ProfileFormSkeleton />}>
         <ProfileData />
       </Suspense>

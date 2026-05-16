@@ -1,57 +1,47 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function DashboardLoading() {
   return (
-    <div className="container mx-auto py-8 px-4 space-y-8">
+    <div className="container mx-auto py-8 px-4 max-w-5xl space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start">
         <div className="space-y-2">
-          <Skeleton className="h-9 w-52" />
-          <Skeleton className="h-5 w-72" />
+          <Skeleton className="h-7 w-36" />
+          <Skeleton className="h-4 w-56" />
         </div>
-        <Button disabled>
-          <Plus className="h-4 w-4 mr-2" />
-          Analyse New Job
-        </Button>
+        <Skeleton className="h-9 w-28 rounded-lg" />
       </div>
 
-      {/* Stats Skeleton */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <Card key={i}>
-            <CardHeader className="pb-2">
-              <Skeleton className="h-4 w-24" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-8 w-12" />
+            <CardContent className="p-5 space-y-3">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-8 w-14" />
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Job List Skeleton */}
-      <div className="space-y-4">
-        <Skeleton className="h-6 w-40" />
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i}>
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div className="space-y-2">
+      {/* Search bar */}
+      <Skeleton className="h-11 w-full rounded-xl" />
+
+      {/* Job cards */}
+      <div className="space-y-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i} className="border-l-4 border-l-muted">
+            <CardContent className="p-5">
+              <div className="flex justify-between items-start gap-4">
+                <div className="space-y-2 flex-1">
                   <Skeleton className="h-5 w-56" />
                   <Skeleton className="h-4 w-36" />
                 </div>
-                <Skeleton className="h-6 w-20 rounded-full" />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <div className="flex gap-2 pt-2">
-                <Skeleton className="h-8 w-24" />
-                <Skeleton className="h-8 w-24" />
+                <div className="text-right space-y-1">
+                  <Skeleton className="h-6 w-12 ml-auto" />
+                  <Skeleton className="h-3 w-20 ml-auto" />
+                </div>
               </div>
             </CardContent>
           </Card>

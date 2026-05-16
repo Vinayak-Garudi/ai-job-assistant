@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, Star } from "lucide-react";
+import { TrendingUp, Star, Briefcase, BarChart2 } from "lucide-react";
 import type { JobMatchStats } from "@/types";
 
 interface DashboardStatsProps {
@@ -7,38 +7,57 @@ interface DashboardStatsProps {
 }
 
 export default function DashboardStats({ stats }: DashboardStatsProps) {
-  const { totalJobs, avgMatch, highMatches } = stats;
+  const { totalJobs, avgMatch, highMatches, totalAnalyzed } = stats;
 
   const statCards = [
     {
-      label: "High Matches",
-      value: `${highMatches} / ${totalJobs}`,
-      icon: Star,
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
+      label: "Jobs Tracked",
+      value: totalJobs,
+      icon: Briefcase,
+      gradient: "from-violet-500/10 to-purple-500/10",
+      iconClass: "text-violet-500",
+      border: "border-violet-500/20",
     },
     {
-      label: "Avg Match Score",
+      label: "Analysed",
+      value: totalAnalyzed,
+      icon: BarChart2,
+      gradient: "from-blue-500/10 to-indigo-500/10",
+      iconClass: "text-blue-500",
+      border: "border-blue-500/20",
+    },
+    {
+      label: "High Matches",
+      value: highMatches,
+      icon: Star,
+      gradient: "from-amber-500/10 to-orange-500/10",
+      iconClass: "text-amber-500",
+      border: "border-amber-500/20",
+    },
+    {
+      label: "Avg Match",
       value: `${avgMatch.toFixed(1)}%`,
       icon: TrendingUp,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50 dark:bg-purple-900/20",
+      gradient: "from-emerald-500/10 to-teal-500/10",
+      iconClass: "text-emerald-500",
+      border: "border-emerald-500/20",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {statCards.map((stat) => (
-        <Card key={stat.label}>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-                <p className="text-3xl font-bold mt-2">{stat.value}</p>
+        <Card key={stat.label} className={`border ${stat.border} overflow-hidden`}>
+          <CardContent className="p-5">
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} pointer-events-none rounded-xl`} />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  {stat.label}
+                </p>
+                <stat.icon className={`h-4 w-4 ${stat.iconClass}`} />
               </div>
-              <div className={`p-3 rounded-full ${stat.bgColor}`}>
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
-              </div>
+              <p className="text-3xl font-bold">{stat.value}</p>
             </div>
           </CardContent>
         </Card>
