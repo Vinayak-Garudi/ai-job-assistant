@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Agent Workflow
+
+For every implementation task in this repo, follow this agent pipeline:
+
+1. **Developer** — invoke the `/ai-job-assistant-developer` skill with the task description. The developer agent implements the feature or fix.
+2. **Tester** — after implementation, invoke the `/ai-job-assistant-tester` skill with the same task description. The tester audits correctness, runs lint/build, checks edge cases, and produces a test report.
+3. **Reviewer** — invoke the `/ai-job-assistant-reviewer` skill when the change is non-trivial (new feature, refactor, or architectural change), or when the tester flags issues. Skip for one-line fixes that pass lint and build cleanly.
+
+Always run developer → tester in sequence. Run reviewer when warranted. Do not skip the tester step.
+
 ## Commands
 
 ```bash
