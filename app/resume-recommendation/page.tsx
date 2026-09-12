@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 import { getResumeRecommendation } from "./actions";
 import ResumeRecommendationLoading from "./loading";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
+import { getIsGuest } from "@/lib/authState";
+import { DEMO_RESUME, DEMO_USERNAME } from "@/lib/demoData";
 import {
   Card,
   CardContent,
@@ -17,10 +20,21 @@ import {
   FileText,
   AlertCircle,
 } from "lucide-react";
+import type { IdealResume } from "@/types";
 
 async function ResumeData() {
   const { resume, username } = await getResumeRecommendation();
 
+  return <ResumeView resume={resume} username={username} />;
+}
+
+function ResumeView({
+  resume,
+  username,
+}: {
+  resume: IdealResume | null;
+  username: string;
+}) {
   if (!resume) {
     return (
       <Card>
@@ -287,7 +301,9 @@ async function ResumeData() {
   );
 }
 
-export default function ResumeRecommendationPage() {
+export default async function ResumeRecommendationPage() {
+  const isGuest = await getIsGuest();
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <div className="mb-8">
@@ -298,9 +314,16 @@ export default function ResumeRecommendationPage() {
         </p>
       </div>
 
-      <Suspense fallback={<ResumeRecommendationLoading />}>
-        <ResumeData />
-      </Suspense>
+      {isGuest ? (
+        <div className="space-y-6">
+          <DemoDataBanner feature="a sample resume" />
+          <ResumeView resume={DEMO_RESUME} username={DEMO_USERNAME} />
+        </div>
+      ) : (
+        <Suspense fallback={<ResumeRecommendationLoading />}>
+          <ResumeData />
+        </Suspense>
+      )}
     </div>
   );
 }

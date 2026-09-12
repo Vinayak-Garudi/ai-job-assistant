@@ -2,8 +2,11 @@ import { Suspense } from "react";
 import { getJobMatches, searchJobMatches } from "./actions";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import JobListClient from "@/components/dashboard/JobListClient";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { getIsGuest } from "@/lib/authState";
+import { DEMO_JOB_MATCHES_RESULT } from "@/lib/demoData";
 
 async function DashboardData({ page, query }: { page: number; query: string }) {
   const { jobs, stats, pagination } = query
@@ -18,6 +21,17 @@ async function DashboardData({ page, query }: { page: number; query: string }) {
         pagination={pagination}
         initialQuery={query}
       />
+    </>
+  );
+}
+
+function DemoDashboardData() {
+  const { jobs, stats, pagination } = DEMO_JOB_MATCHES_RESULT;
+
+  return (
+    <>
+      <DashboardStats stats={stats} />
+      <JobListClient initialJobs={jobs} pagination={pagination} isGuest />
     </>
   );
 }
@@ -64,6 +78,7 @@ export default async function DashboardPage({
   const params = await searchParams;
   const page = Math.max(1, parseInt(params.page || "1", 10) || 1);
   const query = params.q?.trim() || "";
+  const isGuest = await getIsGuest();
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">
@@ -76,9 +91,16 @@ export default async function DashboardPage({
         </div>
       </div>
 
-      <Suspense key={`${page}-${query}`} fallback={<DashboardDataSkeleton />}>
-        <DashboardData page={page} query={query} />
-      </Suspense>
+      {isGuest ? (
+        <>
+          <DemoDataBanner feature="sample job matches" />
+          <DemoDashboardData />
+        </>
+      ) : (
+        <Suspense key={`${page}-${query}`} fallback={<DashboardDataSkeleton />}>
+          <DashboardData page={page} query={query} />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Define your protected routes and their required roles
-const protectedRoutes = {
+// Routes that require a session. Guests are sent to the login page.
+// Every other route is browsable by guests, who see static demo data.
+const authOnlyRoutes: Record<string, string[]> = {
   "/admin": ["admin"],
-  "/dashboard": ["admin", "user"],
-  "/profile": ["admin", "user"],
-  "/jobs": ["admin", "user"],
-  "/linkedin-recommendation": ["admin", "user"],
-  "/job-specific-details": ["admin", "user"],
-  "/resume-recommendation": ["admin", "user"],
-  "/resume-estimate": ["admin", "user"],
-  // Add more routes and their allowed roles as needed
+  "/onboarding": ["admin", "user"],
 };
 
 export function proxy(request: NextRequest) {
@@ -34,26 +28,18 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // Check if the current path is protected
-  const isProtectedRoute = Object.keys(protectedRoutes).some((route) =>
+  const matchedRoute = Object.keys(authOnlyRoutes).find((route) =>
     path.startsWith(route),
   );
 
-  if (isProtectedRoute) {
-    // Find which protected route matches the current path
-    const matchedRoute = Object.keys(protectedRoutes).find((route) =>
-      path.startsWith(route),
-    );
+  if (matchedRoute) {
+    const allowedRoles = authOnlyRoutes[matchedRoute];
 
-    if (matchedRoute) {
-      const allowedRoles =
-        protectedRoutes[matchedRoute as keyof typeof protectedRoutes];
-
-      // Check if the user's role is allowed
-      if (!allowedRoles.includes(userRole)) {
-        // Redirect to login or unauthorized page
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
-      }
+    if (!allowedRoles.includes(userRole)) {
+      // Guests have no session at all — send them to log in rather than to a
+      // dead end. A signed-in user with the wrong role is genuinely forbidden.
+      const destination = userToken ? "/unauthorized" : "/auth/login";
+      return NextResponse.redirect(new URL(destination, request.url));
     }
   }
 

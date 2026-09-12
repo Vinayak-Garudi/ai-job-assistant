@@ -14,7 +14,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { JobMatch } from "@/types";
-import { getMatchColor, getMatchLabel } from "@/lib/utils";
+import { getMatchColor } from "@/lib/utils";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
+import { getIsGuest } from "@/lib/authState";
+import { getDemoJobsWithDetails } from "@/lib/demoData";
 
 async function getJobsWithDetails(): Promise<JobMatch[]> {
   const response = await apiRequest("job-match/job-specific-details-list");
@@ -23,7 +26,8 @@ async function getJobsWithDetails(): Promise<JobMatch[]> {
 }
 
 export default async function JobSpecificDetailsListPage() {
-  const jobs = await getJobsWithDetails();
+  const isGuest = await getIsGuest();
+  const jobs = isGuest ? getDemoJobsWithDetails() : await getJobsWithDetails();
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-3xl space-y-6">
@@ -37,6 +41,8 @@ export default async function JobSpecificDetailsListPage() {
           for your job matches.
         </p>
       </div>
+
+      {isGuest && <DemoDataBanner feature="sample outreach content" />}
 
       {jobs.length === 0 ? (
         <Card>

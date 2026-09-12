@@ -46,10 +46,14 @@ export function SkillsEditor({
           <Badge key={skill} variant={variant} className="gap-1">
             {skill}
             {isEditing && (
-              <X
-                className="h-3 w-3 cursor-pointer hover:text-destructive"
+              <button
+                type="button"
+                aria-label={`Remove ${skill}`}
                 onClick={() => onRemove(skill)}
-              />
+                className="-mr-0.5 cursor-pointer rounded-full outline-none hover:text-destructive focus-visible:ring-[2px] focus-visible:ring-ring/50"
+              >
+                <X className="h-3 w-3" />
+              </button>
             )}
           </Badge>
         ))}

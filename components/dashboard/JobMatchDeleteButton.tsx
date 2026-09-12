@@ -10,18 +10,25 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { deleteJobMatch } from "@/app/dashboard/actions";
+import {
+  LoginPromptDialog,
+  useLoginPrompt,
+} from "@/components/guest/LoginPromptDialog";
 
 interface JobMatchDeleteButtonProps {
   id: string;
   onDelete: () => void;
+  isGuest?: boolean;
 }
 
 export default function JobMatchDeleteButton({
   id,
   onDelete,
+  isGuest = false,
 }: JobMatchDeleteButtonProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { prompt, dialogProps } = useLoginPrompt(isGuest);
 
   async function handleDelete(e: React.MouseEvent) {
     e.preventDefault();
@@ -37,6 +44,25 @@ export default function JobMatchDeleteButton({
     } finally {
       setLoading(false);
     }
+  }
+
+  if (isGuest) {
+    return (
+      <>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            prompt("manage your own job matches");
+          }}
+          className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+          aria-label="Delete job"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+        <LoginPromptDialog {...dialogProps} />
+      </>
+    );
   }
 
   return (

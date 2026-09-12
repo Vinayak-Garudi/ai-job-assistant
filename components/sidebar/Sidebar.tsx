@@ -1,11 +1,6 @@
-import { headers } from "next/headers";
 import { SidebarClient } from "./SidebarClient";
 
-export async function Sidebar() {
-  const headerStore = await headers();
-  const isAuthenticated = headerStore.get("x-is-authenticated") === "true";
-
-  if (!isAuthenticated) return null;
-
+export function Sidebar() {
+  // Guests browse the same navigation — the pages themselves render demo data.
   return <SidebarClient />;
 }

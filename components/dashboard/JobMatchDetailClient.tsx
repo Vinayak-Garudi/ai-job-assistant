@@ -19,17 +19,24 @@ import { toast } from "sonner";
 import { apiRequest } from "@/lib/api";
 import type { JobMatch, JobMatchAnalysis } from "@/types";
 import { getMatchColor, getMatchLabel } from "@/lib/utils";
+import {
+  LoginPromptDialog,
+  useLoginPrompt,
+} from "@/components/guest/LoginPromptDialog";
 
 interface JobMatchDetailClientProps {
   job: JobMatch;
+  isGuest?: boolean;
 }
 
 export default function JobMatchDetailClient({
   job,
+  isGuest = false,
 }: JobMatchDetailClientProps) {
   const [analysis, setAnalysis] = useState<JobMatchAnalysis>(job.analysis);
   const [reanalyzing, setReanalyzing] = useState(false);
   const [fetchingDetails, setFetchingDetails] = useState(false);
+  const { guard, dialogProps } = useLoginPrompt(isGuest);
   const id = job._id ?? job.id;
 
   const hasJobSpecificDetails =
@@ -39,6 +46,7 @@ export default function JobMatchDetailClient({
     (analysis.jobSpecificTips?.length ?? 0) > 0;
 
   async function handleReanalyze() {
+    if (!guard("re-run this analysis")) return;
     setReanalyzing(true);
     try {
       const response = await apiRequest(`job-match/${id}/reanalyze`, {
@@ -58,6 +66,7 @@ export default function JobMatchDetailClient({
   }
 
   async function handleGetJobSpecificDetails() {
+    if (!guard("generate job-specific details")) return;
     setFetchingDetails(true);
     try {
       const response = await apiRequest(
@@ -223,6 +232,8 @@ export default function JobMatchDetailClient({
           </p>
         </CardContent>
       </Card>
+
+      <LoginPromptDialog {...dialogProps} />
 
       {/* Footer */}
       <p className="text-xs text-muted-foreground text-center">

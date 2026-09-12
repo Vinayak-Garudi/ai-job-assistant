@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getLinkedInProfile } from "./actions";
 import LinkedInRecommendationLoading from "./loading";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
+import { getIsGuest } from "@/lib/authState";
+import { DEMO_LINKEDIN_PROFILE, DEMO_USERNAME } from "@/lib/demoData";
 import {
   Card,
   CardContent,
@@ -11,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, FolderOpen, User, FileText } from "lucide-react";
+import type { IdealLinkedInProfile } from "@/types";
 
 async function LinkedInProfileData() {
   const { profile, username } = await getLinkedInProfile();
@@ -19,6 +23,16 @@ async function LinkedInProfileData() {
     redirect("/profile");
   }
 
+  return <LinkedInProfileView profile={profile} username={username} />;
+}
+
+function LinkedInProfileView({
+  profile,
+  username,
+}: {
+  profile: IdealLinkedInProfile;
+  username: string;
+}) {
   const hasIntro = profile.intro?.trim();
   const hasAbout = profile.about?.trim();
   const hasExperience = profile.experience?.length > 0;
@@ -176,7 +190,9 @@ async function LinkedInProfileData() {
   );
 }
 
-export default function LinkedInRecommendationPage() {
+export default async function LinkedInRecommendationPage() {
+  const isGuest = await getIsGuest();
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <div className="mb-8">
@@ -189,9 +205,19 @@ export default function LinkedInRecommendationPage() {
         </p>
       </div>
 
-      <Suspense fallback={<LinkedInRecommendationLoading />}>
-        <LinkedInProfileData />
-      </Suspense>
+      {isGuest ? (
+        <div className="space-y-6">
+          <DemoDataBanner feature="a sample LinkedIn profile" />
+          <LinkedInProfileView
+            profile={DEMO_LINKEDIN_PROFILE}
+            username={DEMO_USERNAME}
+          />
+        </div>
+      ) : (
+        <Suspense fallback={<LinkedInRecommendationLoading />}>
+          <LinkedInProfileData />
+        </Suspense>
+      )}
     </div>
   );
 }

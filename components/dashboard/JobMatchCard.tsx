@@ -9,9 +9,14 @@ import { getMatchColor, getMatchLabel } from "@/lib/utils";
 interface JobMatchCardProps {
   job: JobMatch;
   onDelete: () => void;
+  isGuest?: boolean;
 }
 
-export default function JobMatchCard({ job, onDelete }: JobMatchCardProps) {
+export default function JobMatchCard({
+  job,
+  onDelete,
+  isGuest = false,
+}: JobMatchCardProps) {
   const { analysis } = job;
   const id = job._id ?? job.id;
 
@@ -37,7 +42,11 @@ export default function JobMatchCard({ job, onDelete }: JobMatchCardProps) {
               {analysis.matchingPercentage}% —{" "}
               {getMatchLabel(analysis.matchingPercentage)}
             </Badge>
-            <JobMatchDeleteButton id={id} onDelete={onDelete} />
+            <JobMatchDeleteButton
+              id={id}
+              onDelete={onDelete}
+              isGuest={isGuest}
+            />
           </div>
         </CardHeader>
       </Card>

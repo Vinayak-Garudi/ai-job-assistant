@@ -6,6 +6,9 @@ import BackButton from "@/components/ui/back-button";
 import type { JobMatch } from "@/types";
 import { getMatchColor, getMatchLabel } from "@/lib/utils";
 import JobSpecificDetailsClient from "@/components/dashboard/JobSpecificDetailsClient";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
+import { getIsGuest } from "@/lib/authState";
+import { getDemoJobMatch } from "@/lib/demoData";
 
 async function getJobMatch(id: string): Promise<JobMatch | null> {
   const response = await apiRequest(`job-match/${id}`);
@@ -19,7 +22,8 @@ export default async function JobSpecificDetailPage({
   params: Promise<{ _id: string }>;
 }) {
   const { _id } = await params;
-  const job = await getJobMatch(_id);
+  const isGuest = await getIsGuest();
+  const job = isGuest ? getDemoJobMatch(_id) : await getJobMatch(_id);
 
   if (!job) notFound();
 
@@ -50,7 +54,9 @@ export default async function JobSpecificDetailPage({
         </div>
       </div>
 
-      <JobSpecificDetailsClient job={job} />
+      {isGuest && <DemoDataBanner feature="sample outreach content" />}
+
+      <JobSpecificDetailsClient job={job} isGuest={isGuest} />
     </div>
   );
 }
