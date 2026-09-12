@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "./SidebarContext";
+import { shouldShowSidebar } from "./routes";
 import { useTheme } from "@/components/theme-provider";
 
 const navLinks = [
@@ -47,6 +48,8 @@ export function SidebarClient() {
   const { open, toggle } = useSidebar();
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+
+  if (!shouldShowSidebar(pathname)) return null;
 
   return (
     <>

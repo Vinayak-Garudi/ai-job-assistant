@@ -36,7 +36,7 @@ export default function Home() {
               Streamline your job search with intelligent matching powered by
               AI.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/auth/signup">
                   Get Started
@@ -44,9 +44,15 @@ export default function Home() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
+                <Link href="/dashboard">Explore without an account</Link>
+              </Button>
+              <Button size="lg" variant="ghost" asChild>
                 <Link href="/auth/login">Sign In</Link>
               </Button>
             </div>
+            <p className="text-sm text-muted-foreground">
+              Browse every feature with sample data — no signup required.
+            </p>
           </div>
         </div>
       </section>
@@ -132,12 +138,22 @@ export default function Home() {
                 Join thousands of job seekers using AI to land their dream roles
                 faster.
               </p>
-              <Button size="lg" variant="secondary" asChild>
-                <Link href="/auth/signup">
-                  Start Your Free Account
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <Button size="lg" variant="secondary" asChild>
+                  <Link href="/auth/signup">
+                    Start Your Free Account
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                  asChild
+                >
+                  <Link href="/dashboard">Take a look around first</Link>
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>

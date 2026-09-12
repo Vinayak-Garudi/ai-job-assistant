@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LucideLinkedin, TrendingUp } from "lucide-react";
+import GuestProfilePrompt from "@/components/profile/GuestProfilePrompt";
+import { getIsGuest } from "@/lib/authState";
 
 async function ProfileData() {
   const profile = await getUserProfile();
@@ -39,7 +41,23 @@ function ProfileFormSkeleton() {
   );
 }
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const isGuest = await getIsGuest();
+
+  if (isGuest) {
+    return (
+      <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">User Profile</h1>
+          <p className="text-muted-foreground">
+            Sign in to build the profile that powers every AI feature here
+          </p>
+        </div>
+        <GuestProfilePrompt />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-6xl">
       {/* Header — renders immediately */}

@@ -16,9 +16,14 @@ import {
 import { toast } from "sonner";
 import { apiRequest } from "@/lib/api";
 import type { JobMatch, JobMatchAnalysis } from "@/types";
+import {
+  LoginPromptDialog,
+  useLoginPrompt,
+} from "@/components/guest/LoginPromptDialog";
 
 interface JobSpecificDetailsClientProps {
   job: JobMatch;
+  isGuest?: boolean;
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -47,9 +52,11 @@ function CopyButton({ text }: { text: string }) {
 
 export default function JobSpecificDetailsClient({
   job,
+  isGuest = false,
 }: JobSpecificDetailsClientProps) {
   const [analysis, setAnalysis] = useState<JobMatchAnalysis>(job.analysis);
   const [fetchingDetails, setFetchingDetails] = useState(false);
+  const { guard, dialogProps } = useLoginPrompt(isGuest);
   const id = job._id ?? job.id;
 
   const hasDetails =
@@ -59,6 +66,7 @@ export default function JobSpecificDetailsClient({
     (analysis.jobSpecificTips?.length ?? 0) > 0;
 
   async function handleRegenerate() {
+    if (!guard("generate job-specific details")) return;
     setFetchingDetails(true);
     try {
       const response = await apiRequest(
@@ -82,21 +90,24 @@ export default function JobSpecificDetailsClient({
 
   if (!hasDetails) {
     return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <Sparkles className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-          <h3 className="text-lg font-semibold mb-2">No Details Yet</h3>
-          <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-4">
-            Job-specific details haven&apos;t been generated for this job yet.
-          </p>
-          <Button onClick={handleRegenerate} disabled={fetchingDetails}>
-            <Sparkles
-              className={`h-4 w-4 mr-2 ${fetchingDetails ? "animate-pulse" : ""}`}
-            />
-            {fetchingDetails ? "Generating…" : "Generate Details"}
-          </Button>
-        </CardContent>
-      </Card>
+      <>
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Sparkles className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+            <h3 className="text-lg font-semibold mb-2">No Details Yet</h3>
+            <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-4">
+              Job-specific details haven&apos;t been generated for this job yet.
+            </p>
+            <Button onClick={handleRegenerate} disabled={fetchingDetails}>
+              <Sparkles
+                className={`h-4 w-4 mr-2 ${fetchingDetails ? "animate-pulse" : ""}`}
+              />
+              {fetchingDetails ? "Generating…" : "Generate Details"}
+            </Button>
+          </CardContent>
+        </Card>
+        <LoginPromptDialog {...dialogProps} />
+      </>
     );
   }
 
@@ -202,6 +213,8 @@ export default function JobSpecificDetailsClient({
           </Card>
         )}
       </div>
+
+      <LoginPromptDialog {...dialogProps} />
     </div>
   );
 }

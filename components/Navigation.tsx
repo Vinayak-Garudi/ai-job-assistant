@@ -26,19 +26,22 @@ export default async function Navigation() {
       <div className="w-full px-6">
         <div className="flex h-16 w-full items-center justify-between">
           <div className="flex items-center gap-1">
-            {isAuthenticated && <SidebarToggle />}
+            <SidebarToggle />
             <Link href="/" className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               <span className="font-bold text-lg">AI Job Assistant</span>
             </Link>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {isAuthenticated ? (
               <>
                 <UserMenu onLogout={handleLogout} />
               </>
             ) : (
               <>
+                <Link href="/auth/login">
+                  <Button variant="ghost">Log in</Button>
+                </Link>
                 <Link href="/auth/signup">
                   <Button>Get Started</Button>
                 </Link>

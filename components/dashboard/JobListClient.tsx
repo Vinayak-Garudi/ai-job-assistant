@@ -10,23 +10,30 @@ import {
   getJobMatches,
   searchJobMatches,
 } from "@/app/dashboard/actions";
+import {
+  LoginPromptDialog,
+  useLoginPrompt,
+} from "@/components/guest/LoginPromptDialog";
 
 interface JobListClientProps {
   initialJobs: JobMatch[];
   pagination: Pagination;
   initialQuery?: string;
+  isGuest?: boolean;
 }
 
 export default function JobListClient({
   initialJobs,
   pagination: initialPagination,
   initialQuery = "",
+  isGuest = false,
 }: JobListClientProps) {
   const [jobs, setJobs] = useState(initialJobs);
   const [pagination, setPagination] = useState(initialPagination);
   const [query, setQuery] = useState(initialQuery);
   const [isLoading, setIsLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { prompt, guard, dialogProps } = useLoginPrompt(isGuest);
 
   const fetchJobs = async (searchQuery: string, page: number) => {
     setIsLoading(true);
@@ -49,6 +56,7 @@ export default function JobListClient({
 
   // Debounced search — only fires when user changes the query
   useEffect(() => {
+    if (isGuest) return;
     if (query === initialQuery) return;
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -62,11 +70,13 @@ export default function JobListClient({
   }, [query]);
 
   const goToPage = (page: number) => {
+    if (!guard("browse all of your job matches")) return;
     fetchJobs(query, page);
   };
 
   const clearSearch = () => {
     setQuery("");
+    if (!guard("search your job matches")) return;
     fetchJobs("", 1);
   };
 
@@ -78,8 +88,20 @@ export default function JobListClient({
           placeholder="Search by title, company, or location..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          readOnly={isGuest}
+          tabIndex={isGuest ? -1 : undefined}
           className="pl-10 pr-10"
         />
+        {/* Guests get a real button over the field: focusing the input itself
+            would re-open the dialog each time Radix restored focus to it. */}
+        {isGuest && (
+          <button
+            type="button"
+            aria-label="Search your job matches"
+            onClick={() => prompt("search your job matches")}
+            className="absolute inset-0 rounded-md cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          />
+        )}
         {query && (
           <button
             onClick={clearSearch}
@@ -105,6 +127,7 @@ export default function JobListClient({
             <JobMatchCard
               key={job.id || job._id}
               job={job}
+              isGuest={isGuest}
               onDelete={() =>
                 setJobs((prev) =>
                   prev.filter((j) => (j._id ?? j.id) !== (job._id ?? job.id)),
@@ -140,6 +163,8 @@ export default function JobListClient({
           </Button>
         </div>
       )}
+
+      <LoginPromptDialog {...dialogProps} />
     </div>
   );
 }

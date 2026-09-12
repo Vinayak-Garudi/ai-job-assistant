@@ -6,8 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiRequest } from "@/lib/api";
+import {
+  LoginPromptDialog,
+  useLoginPrompt,
+} from "@/components/guest/LoginPromptDialog";
 
-export default function AddJobForm() {
+interface AddJobFormProps {
+  isGuest?: boolean;
+}
+
+export default function AddJobForm({ isGuest = false }: AddJobFormProps) {
   const router = useRouter();
   const mode = "url"; // For now, we will only implement URL input mode. Manual entry can be added later.
   const [url, setUrl] = useState("");
@@ -17,9 +25,11 @@ export default function AddJobForm() {
   const [location, setLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { guard, dialogProps } = useLoginPrompt(isGuest);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!guard("analyse a job posting")) return;
     setIsLoading(true);
     setError(null);
 
@@ -158,7 +168,16 @@ export default function AddJobForm() {
               </>
             )}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type={isGuest ? "button" : "submit"}
+              className="w-full"
+              disabled={isLoading}
+              onClick={
+                isGuest
+                  ? () => guard("analyse a job posting")
+                  : undefined
+              }
+            >
               {isLoading ? "Analyzing..." : "Analyze with AI"}
             </Button>
 
@@ -173,6 +192,7 @@ export default function AddJobForm() {
         </CardContent>
       </Card>
 
+      <LoginPromptDialog {...dialogProps} />
     </>
   );
 }

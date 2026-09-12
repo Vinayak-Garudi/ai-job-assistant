@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import type { JobMatch } from "@/types";
 import JobMatchDetailClient from "@/components/dashboard/JobMatchDetailClient";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
+import { getIsGuest } from "@/lib/authState";
+import { getDemoJobMatch } from "@/lib/demoData";
 
 async function getJobMatch(id: string): Promise<JobMatch | null> {
   const response = await apiRequest(`job-match/${id}`);
@@ -18,7 +21,8 @@ export default async function JobMatchDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const job = await getJobMatch(id);
+  const isGuest = await getIsGuest();
+  const job = isGuest ? getDemoJobMatch(id) : await getJobMatch(id);
 
   if (!job) notFound();
 
@@ -31,7 +35,9 @@ export default async function JobMatchDetailPage({
         </Button>
       </Link>
 
-      <JobMatchDetailClient job={job} />
+      {isGuest && <DemoDataBanner feature="a sample job analysis" />}
+
+      <JobMatchDetailClient job={job} isGuest={isGuest} />
     </div>
   );
 }

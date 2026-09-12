@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { getSalaryEstimate } from "./actions";
 import SalaryEstimateLoading from "./loading";
+import DemoDataBanner from "@/components/guest/DemoDataBanner";
+import { getIsGuest } from "@/lib/authState";
+import { DEMO_SALARY_ESTIMATE, DEMO_USERNAME } from "@/lib/demoData";
 import {
   Card,
   CardContent,
@@ -11,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Lightbulb, FileText, Calendar, Info } from "lucide-react";
+import type { SalaryEstimate } from "@/types";
 
 function formatSalary(amount: number, currency: string): string {
   if (currency === "INR") {
@@ -35,6 +39,16 @@ function formatDate(date: string | Date): string {
 async function SalaryEstimateData() {
   const { estimate, username } = await getSalaryEstimate();
 
+  return <SalaryEstimateView estimate={estimate} username={username} />;
+}
+
+function SalaryEstimateView({
+  estimate,
+  username,
+}: {
+  estimate: SalaryEstimate | null;
+  username: string;
+}) {
   if (!estimate) {
     return (
       <Card>
@@ -144,7 +158,9 @@ async function SalaryEstimateData() {
   );
 }
 
-export default function SalaryEstimatePage() {
+export default async function SalaryEstimatePage() {
+  const isGuest = await getIsGuest();
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <div className="mb-8">
@@ -155,9 +171,19 @@ export default function SalaryEstimatePage() {
         </p>
       </div>
 
-      <Suspense fallback={<SalaryEstimateLoading />}>
-        <SalaryEstimateData />
-      </Suspense>
+      {isGuest ? (
+        <div className="space-y-6">
+          <DemoDataBanner feature="a sample salary estimate" />
+          <SalaryEstimateView
+            estimate={DEMO_SALARY_ESTIMATE}
+            username={DEMO_USERNAME}
+          />
+        </div>
+      ) : (
+        <Suspense fallback={<SalaryEstimateLoading />}>
+          <SalaryEstimateData />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,11 +8,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FieldError } from "@/components/ui/field-error";
+import { SelectWithOther } from "./SelectWithOther";
+import {
+  INDUSTRY_OPTIONS,
+  JOB_TITLE_OPTIONS,
+  getSuggestedIndustries,
+} from "@/lib/profileOptions";
 import type { UserProfile } from "@/types";
+
+type ProfessionalInfoErrors = Partial<
+  Record<keyof UserProfile["professionalInfo"], string>
+>;
 
 interface ProfessionalInfoEditorProps {
   profile: UserProfile;
   isEditing: boolean;
+  errors?: ProfessionalInfoErrors;
   onUpdate: (
     field: keyof UserProfile["professionalInfo"],
     value: string | number | null,
@@ -23,28 +34,35 @@ interface ProfessionalInfoEditorProps {
 export function ProfessionalInfoEditor({
   profile,
   isEditing,
+  errors = {},
   onUpdate,
 }: ProfessionalInfoEditorProps) {
-
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <SelectWithOther
+        id="currentTitle"
+        label="Current Title"
+        value={profile.professionalInfo.currentTitle}
+        options={JOB_TITLE_OPTIONS}
+        placeholder="Select your job title"
+        otherPlaceholder="Type your job title"
+        disabled={!isEditing}
+        error={errors.currentTitle}
+        onChange={(value) => onUpdate("currentTitle", value)}
+      />
+
       <div className="space-y-2">
-        <label className="text-sm font-medium">Current Title</label>
+        <label htmlFor="currentCompany" className="text-sm font-medium">
+          Current Company
+        </label>
         <Input
-          value={profile.professionalInfo.currentTitle}
-          disabled={!isEditing}
-          onChange={(e) => onUpdate("currentTitle", e.target.value)}
-        />
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Current Company</label>
-        <Input
+          id="currentCompany"
           value={profile.professionalInfo.currentCompany}
           disabled={!isEditing}
           onChange={(e) => onUpdate("currentCompany", e.target.value)}
         />
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-medium">Experience</label>
         <div className="flex gap-2">
@@ -52,6 +70,7 @@ export function ProfessionalInfoEditor({
             <Input
               type="number"
               placeholder="Years"
+              aria-label="Years of experience"
               min={0}
               value={profile.professionalInfo.experienceYears}
               disabled={!isEditing}
@@ -67,6 +86,7 @@ export function ProfessionalInfoEditor({
             <Input
               type="number"
               placeholder="Months"
+              aria-label="Months of experience"
               min={0}
               max={11}
               value={profile.professionalInfo.experienceMonths ?? 0}
@@ -84,23 +104,33 @@ export function ProfessionalInfoEditor({
           </div>
         </div>
       </div>
+
+      <SelectWithOther
+        id="industry"
+        label="Industry"
+        value={profile.professionalInfo.industry}
+        options={INDUSTRY_OPTIONS}
+        suggestions={getSuggestedIndustries(
+          profile.professionalInfo.currentTitle,
+        )}
+        placeholder="Select your industry"
+        otherPlaceholder="Type your industry"
+        disabled={!isEditing}
+        error={errors.industry}
+        onChange={(value) => onUpdate("industry", value)}
+      />
+
       <div className="space-y-2">
-        <label className="text-sm font-medium">Industry</label>
-        <Input
-          value={profile.professionalInfo.industry}
-          disabled={!isEditing}
-          onChange={(e) => onUpdate("industry", e.target.value)}
-        />
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Current CTC per Annum</label>
+        <label htmlFor="currentCTC" className="text-sm font-medium">
+          Current CTC per Annum
+        </label>
         <div className="flex gap-2">
           <Select
             value={profile.professionalInfo.salaryCurrency ?? "INR"}
             disabled={!isEditing}
             onValueChange={(value) => onUpdate("salaryCurrency", value)}
           >
-            <SelectTrigger className="w-24">
+            <SelectTrigger className="w-24" aria-label="Salary currency">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -109,11 +139,13 @@ export function ProfessionalInfoEditor({
             </SelectContent>
           </Select>
           <Input
+            id="currentCTC"
             type="number"
             placeholder="Enter Current CTC per Annum"
             min={0}
             value={profile.professionalInfo.currentCTCPerAnum ?? ""}
             disabled={!isEditing}
+            aria-invalid={Boolean(errors.currentCTCPerAnum)}
             onChange={(e) =>
               onUpdate(
                 "currentCTCPerAnum",
@@ -122,6 +154,7 @@ export function ProfessionalInfoEditor({
             }
           />
         </div>
+        <FieldError message={errors.currentCTCPerAnum} />
       </div>
     </div>
   );
