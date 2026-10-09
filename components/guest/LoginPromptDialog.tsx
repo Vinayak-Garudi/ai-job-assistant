@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import { Lock, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,26 +18,41 @@ interface LoginPromptDialogProps {
   onOpenChange: (open: boolean) => void;
   /** The action the guest tried to take, e.g. "analyse a job". */
   feature?: string;
+  /** Overrides the default "Sign in to …" title. */
+  title?: string;
+  /** Overrides the default example-profile copy. */
+  description?: ReactNode;
+  icon?: LucideIcon;
 }
 
 export function LoginPromptDialog({
   open,
   onOpenChange,
   feature,
+  title,
+  description,
+  icon: Icon = Lock,
 }: LoginPromptDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <div className="mb-1 flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/40">
-            <Lock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            <Icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <DialogTitle>
-            {feature ? `Sign in to ${feature}` : "Sign in to continue"}
+            {title ??
+              (feature ? `Sign in to ${feature}` : "Sign in to continue")}
           </DialogTitle>
           <DialogDescription>
-            You&apos;re browsing sample data. Create a free account to work with
-            your own jobs, resume, and AI analysis — it takes about a minute.
+            {description ?? (
+              <>
+                Everything you&apos;ve seen so far is built from an example
+                profile. Create a free account to get the same AI analysis for
+                your own jobs, resume, and experience — it takes about a
+                minute.
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col sm:flex-row sm:justify-start">

@@ -15,7 +15,7 @@ export default async function AddJobPage() {
       </div>
       {isGuest && (
         <DemoDataBanner
-          feature="the analysis flow"
+          feature="an instant match score for any job posting"
           className="mb-6"
         />
       )}

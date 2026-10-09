@@ -66,7 +66,7 @@ export default function JobSpecificDetailsClient({
     (analysis.jobSpecificTips?.length ?? 0) > 0;
 
   async function handleRegenerate() {
-    if (!guard("generate job-specific details")) return;
+    if (!guard("build an application kit")) return;
     setFetchingDetails(true);
     try {
       const response = await apiRequest(
@@ -75,14 +75,15 @@ export default function JobSpecificDetailsClient({
       );
       if (response.success && response.data?.analysis) {
         setAnalysis(response.data.analysis);
-        toast.success("Job-specific details regenerated");
+        toast.success("Application kit regenerated");
       } else {
         toast.error(
-          response.message || "Failed to generate details. Please try again."
+          response.message ||
+            "Failed to build application kit. Please try again."
         );
       }
     } catch {
-      toast.error("Failed to generate details. Please try again.");
+      toast.error("Failed to build application kit. Please try again.");
     } finally {
       setFetchingDetails(false);
     }
@@ -94,15 +95,16 @@ export default function JobSpecificDetailsClient({
         <Card>
           <CardContent className="py-12 text-center">
             <Sparkles className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-            <h3 className="text-lg font-semibold mb-2">No Details Yet</h3>
+            <h3 className="text-lg font-semibold mb-2">No Application Kit Yet</h3>
             <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-4">
-              Job-specific details haven&apos;t been generated for this job yet.
+              Build a kit to get a tailored LinkedIn message, outreach email,
+              likely interview questions, and tips for this job.
             </p>
             <Button onClick={handleRegenerate} disabled={fetchingDetails}>
               <Sparkles
                 className={`h-4 w-4 mr-2 ${fetchingDetails ? "animate-pulse" : ""}`}
               />
-              {fetchingDetails ? "Generating…" : "Generate Details"}
+              {fetchingDetails ? "Building…" : "Build Application Kit"}
             </Button>
           </CardContent>
         </Card>
@@ -116,7 +118,7 @@ export default function JobSpecificDetailsClient({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-purple-500" />
-          <h2 className="text-base font-semibold">Job-Specific Details</h2>
+          <h2 className="text-base font-semibold">Application Kit</h2>
         </div>
         <Button
           variant="outline"

@@ -1,15 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronLeft, ChevronRight, X, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { JobMatch, Pagination } from "@/types";
 import JobMatchCard from "./JobMatchCard";
-import {
-  getJobMatches,
-  searchJobMatches,
-} from "@/app/dashboard/actions";
+import { getJobMatches } from "@/app/dashboard/actions";
 import {
   LoginPromptDialog,
   useLoginPrompt,
@@ -18,108 +14,36 @@ import {
 interface JobListClientProps {
   initialJobs: JobMatch[];
   pagination: Pagination;
-  initialQuery?: string;
   isGuest?: boolean;
 }
 
 export default function JobListClient({
   initialJobs,
   pagination: initialPagination,
-  initialQuery = "",
   isGuest = false,
 }: JobListClientProps) {
   const [jobs, setJobs] = useState(initialJobs);
   const [pagination, setPagination] = useState(initialPagination);
-  const [query, setQuery] = useState(initialQuery);
-  const [isLoading, setIsLoading] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { prompt, guard, dialogProps } = useLoginPrompt(isGuest);
+  const { guard, dialogProps } = useLoginPrompt(isGuest);
 
-  const fetchJobs = async (searchQuery: string, page: number) => {
-    setIsLoading(true);
-    try {
-      const result = searchQuery.trim()
-        ? await searchJobMatches(searchQuery.trim(), page)
-        : await getJobMatches(page);
-      setJobs(result.jobs);
-      setPagination(result.pagination);
-
-      const params = new URLSearchParams();
-      if (searchQuery.trim()) params.set("q", searchQuery.trim());
-      if (page > 1) params.set("page", String(page));
-      const qs = params.toString();
-      window.history.replaceState(null, "", `/dashboard${qs ? `?${qs}` : ""}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Debounced search — only fires when user changes the query
-  useEffect(() => {
-    if (isGuest) return;
-    if (query === initialQuery) return;
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      fetchJobs(query, 1);
-    }, 400);
-
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [query]);
-
-  const goToPage = (page: number) => {
+  const goToPage = async (page: number) => {
     if (!guard("browse all of your job matches")) return;
-    fetchJobs(query, page);
-  };
-
-  const clearSearch = () => {
-    setQuery("");
-    if (!guard("search your job matches")) return;
-    fetchJobs("", 1);
+    const result = await getJobMatches(page);
+    setJobs(result.jobs);
+    setPagination(result.pagination);
+    window.history.replaceState(
+      null,
+      "",
+      page > 1 ? `/dashboard?page=${page}` : "/dashboard",
+    );
   };
 
   return (
     <div className="space-y-4">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search by title, company, or location..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          readOnly={isGuest}
-          tabIndex={isGuest ? -1 : undefined}
-          className="pl-10 pr-10"
-        />
-        {/* Guests get a real button over the field: focusing the input itself
-            would re-open the dialog each time Radix restored focus to it. */}
-        {isGuest && (
-          <button
-            type="button"
-            aria-label="Search your job matches"
-            onClick={() => prompt("search your job matches")}
-            className="absolute inset-0 rounded-md cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-          />
-        )}
-        {query && (
-          <button
-            onClick={clearSearch}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
-      </div>
-
       {jobs.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
           <p className="text-lg">No jobs found.</p>
-          <p className="text-sm mt-2">
-            {query
-              ? "Try a different search term."
-              : "Analyse a job to get started."}
-          </p>
+          <p className="text-sm mt-2">Analyse a job to get started.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">

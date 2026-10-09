@@ -34,24 +34,24 @@ export default async function JobSpecificDetailsListPage() {
       <div>
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="h-5 w-5 text-purple-500" />
-          <h1 className="text-3xl font-bold">Job-Specific Details</h1>
+          <h1 className="text-3xl font-bold">Application Kit</h1>
         </div>
         <p className="text-muted-foreground">
-          AI-generated outreach messages, emails, interview questions, and tips
-          for your job matches.
+          Tailored LinkedIn messages, outreach emails, likely interview
+          questions, and application tips for each of your job matches.
         </p>
       </div>
 
-      {isGuest && <DemoDataBanner feature="sample outreach content" />}
+      {isGuest && <DemoDataBanner feature="a tailored application kit for every job you apply to" />}
 
       {jobs.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <Sparkles className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-            <h3 className="text-lg font-semibold mb-2">No Details Yet</h3>
+            <h3 className="text-lg font-semibold mb-2">No Application Kits Yet</h3>
             <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-4">
-              Generate job-specific details from any job match page to see them
-              here.
+              Open any job match and click &ldquo;Build Application Kit&rdquo;
+              to see it here.
             </p>
             <Link href="/dashboard">
               <Button variant="outline">Go to Dashboard</Button>
@@ -59,7 +59,7 @@ export default async function JobSpecificDetailsListPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-4">
           {jobs.map((job) => {
             const id = job._id ?? job.id;
             const { analysis } = job;
@@ -70,8 +70,12 @@ export default async function JobSpecificDetailsListPage() {
             const hasTips = (analysis.jobSpecificTips?.length ?? 0) > 0;
 
             return (
-              <Link key={id} href={`/job-specific-details/${id}`}>
-                <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+              <Link
+                key={id}
+                href={`/job-specific-details/${id}`}
+                className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Card className="gap-3 hover:bg-muted/50 transition-colors cursor-pointer">
                   <CardHeader className="pb-2">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">

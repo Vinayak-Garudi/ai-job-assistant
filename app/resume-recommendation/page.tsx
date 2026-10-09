@@ -316,7 +316,7 @@ export default async function ResumeRecommendationPage() {
 
       {isGuest ? (
         <div className="space-y-6">
-          <DemoDataBanner feature="a sample resume" />
+          <DemoDataBanner feature="a resume rewritten for the roles you want" />
           <ResumeView resume={DEMO_RESUME} username={DEMO_USERNAME} />
         </div>
       ) : (
