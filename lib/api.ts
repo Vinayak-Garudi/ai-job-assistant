@@ -107,9 +107,10 @@ export async function apiRequest(
           const { redirect } = await import("next/navigation");
           redirect("/auth/login");
         } else {
-          // Client-side: expire cookies and hard-navigate home
+          // Client-side: expire cookies and send them to log back in, matching
+          // the server-side branch above.
           handleClientLogout();
-          window.location.href = "/";
+          window.location.href = "/auth/login";
         }
       }
 

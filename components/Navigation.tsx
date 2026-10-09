@@ -15,7 +15,7 @@ export default async function Navigation() {
   const handleLogout = async () => {
     "use server";
     await handleAuthLogout();
-    redirect("/", RedirectType.replace);
+    redirect("/dashboard", RedirectType.replace);
   };
 
   return (
@@ -27,7 +27,7 @@ export default async function Navigation() {
         <div className="flex h-16 w-full items-center justify-between">
           <div className="flex items-center gap-1">
             <SidebarToggle />
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/dashboard" className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               <span className="font-bold text-lg">AI Job Assistant</span>
             </Link>

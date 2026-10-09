@@ -86,14 +86,16 @@ export default async function DashboardPage({
         <div>
           <h1 className="text-3xl font-bold mb-2">Job Dashboard</h1>
           <p className="text-muted-foreground">
-            Track and manage your job applications
+            {isGuest
+              ? "See how AI Job Assistant scores your fit for every role you apply to"
+              : "Track and manage your job applications"}
           </p>
         </div>
       </div>
 
       {isGuest ? (
         <>
-          <DemoDataBanner feature="sample job matches" />
+          <DemoDataBanner welcome />
           <DemoDashboardData />
         </>
       ) : (

@@ -23,13 +23,25 @@ export function proxy(request: NextRequest) {
   response.headers.set("x-is-authenticated", userToken ? "true" : "false");
   response.headers.set("x-user-role", userRole);
 
-  // Redirect authenticated users away from auth pages to dashboard
-  if (userRole !== "guest" && (path.includes("auth") || path === "/")) {
+  // There is no marketing page — the app itself is the landing experience, and
+  // guests see it populated with demo data.
+  if (path === "/") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  const matchedRoute = Object.keys(authOnlyRoutes).find((route) =>
-    path.startsWith(route),
+  // Match the /auth segment precisely: a substring test also catches
+  // /unauthorized, which would bounce signed-in users away from the very page
+  // their failed role check sends them to.
+  const isAuthPage = path === "/auth" || path.startsWith("/auth/");
+
+  // Redirect authenticated users away from auth pages to dashboard
+  if (userRole !== "guest" && isAuthPage) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // Match whole segments, so "/admin" never gates a future "/administrators".
+  const matchedRoute = Object.keys(authOnlyRoutes).find(
+    (route) => path === route || path.startsWith(`${route}/`),
   );
 
   if (matchedRoute) {
