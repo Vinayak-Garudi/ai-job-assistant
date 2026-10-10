@@ -48,7 +48,7 @@ export default function JobSuggestionsClient({
   if (!result) {
     return (
       <Card className="border-destructive/30">
-        <CardContent className="space-y-4 py-10 text-center">
+        <CardContent className="space-y-4 px-4 py-10 text-center sm:px-6">
           <AlertCircle className="mx-auto h-10 w-10 text-destructive" />
           <div className="space-y-1">
             <h3 className="text-lg font-semibold">
@@ -58,7 +58,7 @@ export default function JobSuggestionsClient({
               {initialError ?? "Something went wrong. Please try again."}
             </p>
           </div>
-          <div className="flex flex-col justify-center gap-2 sm:flex-row">
+          <div className="mx-auto flex max-w-xs flex-col gap-2 sm:max-w-none sm:flex-row sm:justify-center">
             <Button onClick={handleRetry} disabled={isRetrying}>
               <RefreshCw
                 className={isRetrying ? "h-4 w-4 animate-spin" : "h-4 w-4"}
@@ -81,33 +81,45 @@ export default function JobSuggestionsClient({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2">
+      {/* Refresh sits above the search summary on phones (full width), and
+          to its right from sm up. */}
+      <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 space-y-2">
           {result.queries.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <span>Searched for</span>
+            <div className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
+              <span className="mr-0.5">Searched for</span>
               {result.queries.map((query) => (
-                <Badge key={query} variant="secondary">
+                <Badge
+                  key={query}
+                  variant="secondary"
+                  className="max-w-full truncate font-normal"
+                  title={query}
+                >
                   {query}
                 </Badge>
               ))}
             </div>
           )}
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs leading-relaxed text-muted-foreground">
             Updated{" "}
             <time dateTime={result.generatedAt} suppressHydrationWarning>
-              {new Date(result.generatedAt).toLocaleString()}
+              {new Date(result.generatedAt).toLocaleString(undefined, {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}
             </time>
-            {" · "}
-            Listings come from the original job sites — always confirm details
-            there before applying.
+            <span className="hidden sm:inline">
+              {" · "}
+              Listings come from the original job sites — always confirm
+              details there before applying.
+            </span>
           </p>
         </div>
         <Button
           variant="outline"
           onClick={handleRefresh}
           disabled={isRefreshing}
-          className="shrink-0"
+          className="sm:shrink-0"
         >
           <RefreshCw
             className={isRefreshing ? "h-4 w-4 animate-spin" : "h-4 w-4"}
@@ -117,7 +129,7 @@ export default function JobSuggestionsClient({
       </div>
 
       {!result.rankedByAI && suggestions.length > 0 && (
-        <p className="rounded-lg border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+        <p className="rounded-lg border bg-muted/40 px-3 py-2 text-xs text-muted-foreground sm:text-sm">
           Match scores are unavailable right now, so these openings are shown
           in search order. Try refreshing in a few minutes.
         </p>
@@ -127,7 +139,7 @@ export default function JobSuggestionsClient({
         <JobSuggestionsSkeleton />
       ) : suggestions.length === 0 ? (
         <Card>
-          <CardContent className="space-y-3 py-12 text-center">
+          <CardContent className="space-y-3 px-4 py-12 text-center sm:px-6">
             <SearchX className="mx-auto h-10 w-10 text-muted-foreground" />
             <h3 className="text-lg font-semibold">
               No matching openings found right now

@@ -21,12 +21,12 @@ import { useTheme } from "@/components/theme-provider";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { href: "/job-suggestions", label: "Job Suggestions", Icon: Compass },
   {
     href: "/job-specific-details",
     label: "Application Kit",
     Icon: Sparkles,
   },
-  // { href: "/job-suggestions", label: "Job Suggestions", Icon: Compass },
   { href: "/jobs/add", label: "Analyse Job", Icon: BrainCircuit },
   {
     href: "/linkedin-recommendation",

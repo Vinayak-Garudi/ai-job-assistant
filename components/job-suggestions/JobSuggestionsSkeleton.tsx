@@ -1,11 +1,11 @@
 import { Loader2 } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function JobSuggestionsSkeleton() {
   return (
     <div className="space-y-4" aria-busy="true" aria-live="polite">
-      <div className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm dark:border-blue-900/60 dark:bg-blue-950/30">
+      <div className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-3 py-3 text-sm sm:px-4 dark:border-blue-900/60 dark:bg-blue-950/30">
         <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin text-blue-600 dark:text-blue-400" />
         <div>
           <p className="font-medium text-foreground">
@@ -20,27 +20,26 @@ export default function JobSuggestionsSkeleton() {
       </div>
 
       {Array.from({ length: 3 }).map((_, i) => (
-        <Card key={i}>
-          <CardHeader className="space-y-3">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-5 w-2/3" />
-                <div className="flex gap-3">
-                  <Skeleton className="h-4 w-28" />
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </div>
-              <Skeleton className="h-6 w-28 rounded-full" />
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <Card key={i} className="gap-0 p-4 sm:p-6">
+          <div className="flex flex-col-reverse items-start gap-2 sm:flex-row sm:justify-between sm:gap-4">
+            <Skeleton className="h-5 w-3/4 sm:w-2/3" />
+            <Skeleton className="h-5 w-28 rounded-full" />
+          </div>
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+          <div className="mt-4 space-y-2">
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-5/6" />
-            <div className="flex items-center justify-between pt-1">
+          </div>
+          <div className="mt-4 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-2">
               <Skeleton className="h-5 w-20 rounded-full" />
-              <Skeleton className="h-9 w-36" />
+              <Skeleton className="h-5 w-16 rounded-full" />
             </div>
-          </CardContent>
+            <Skeleton className="h-9 sm:w-40" />
+          </div>
         </Card>
       ))}
     </div>
