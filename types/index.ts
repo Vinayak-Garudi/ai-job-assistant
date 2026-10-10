@@ -185,3 +185,34 @@ export interface JobMatchesResult {
   stats: JobMatchStats;
   pagination: Pagination;
 }
+
+// Job Suggestions Types
+export interface JobSuggestionSource {
+  name: string;
+  domain: string;
+}
+
+export interface JobSuggestion {
+  title: string;
+  company: string;
+  location: string;
+  url: string;
+  source: JobSuggestionSource;
+  snippet: string;
+  workMode: string;
+  employmentType: string;
+  postedDate: string;
+  matchScore: number | null;
+  matchReason: string;
+  verified: boolean;
+}
+
+export interface JobSuggestionsResult {
+  suggestions: JobSuggestion[];
+  queries: string[];
+  rankedByAI: boolean;
+  generatedAt: string;
+  expiresAt: string;
+  nextRefreshAt: string;
+  fromCache: boolean;
+}

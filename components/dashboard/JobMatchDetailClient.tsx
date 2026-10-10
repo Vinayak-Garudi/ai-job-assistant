@@ -36,10 +36,11 @@ export default function JobMatchDetailClient({
   const [analysis, setAnalysis] = useState<JobMatchAnalysis>(job.analysis);
   const [reanalyzing, setReanalyzing] = useState(false);
   const [fetchingDetails, setFetchingDetails] = useState(false);
+  const [sampleJobDialogOpen, setSampleJobDialogOpen] = useState(false);
   const { guard, dialogProps } = useLoginPrompt(isGuest);
   const id = job._id ?? job.id;
 
-  const hasJobSpecificDetails =
+  const hasApplicationKit =
     analysis.jobSpecificMessage ||
     analysis.jobSpecificEmail ||
     (analysis.jobSpecificInterviewQuestions?.length ?? 0) > 0 ||
@@ -66,7 +67,7 @@ export default function JobMatchDetailClient({
   }
 
   async function handleGetJobSpecificDetails() {
-    if (!guard("generate job-specific details")) return;
+    if (!guard("build an application kit")) return;
     setFetchingDetails(true);
     try {
       const response = await apiRequest(
@@ -75,14 +76,15 @@ export default function JobMatchDetailClient({
       );
       if (response.success && response.data?.analysis) {
         setAnalysis(response.data.analysis);
-        toast.success("Job-specific details generated");
+        toast.success("Application kit ready");
       } else {
         toast.error(
-          response.message || "Failed to generate details. Please try again.",
+          response.message ||
+            "Failed to build application kit. Please try again.",
         );
       }
     } catch {
-      toast.error("Failed to generate details. Please try again.");
+      toast.error("Failed to build application kit. Please try again.");
     } finally {
       setFetchingDetails(false);
     }
@@ -125,7 +127,7 @@ export default function JobMatchDetailClient({
               />
               {reanalyzing ? "Analyzing…" : "Reanalyze"}
             </Button>
-            {!hasJobSpecificDetails ? (
+            {!hasApplicationKit ? (
               <Button
                 variant="outline"
                 size="sm"
@@ -136,27 +138,40 @@ export default function JobMatchDetailClient({
                 <Sparkles
                   className={`h-3.5 w-3.5 ${fetchingDetails ? "animate-pulse" : ""}`}
                 />
-                {fetchingDetails ? "Generating…" : "Get Job-Specific Details"}
+                {fetchingDetails ? "Building…" : "Build Application Kit"}
               </Button>
             ) : (
               <Link href={`/job-specific-details/${id}`}>
                 <Button variant="outline" size="sm" className="gap-1.5">
                   <Sparkles className="h-3.5 w-3.5" />
-                  View Job-Specific Details
+                  View Application Kit
                 </Button>
               </Link>
             )}
-            <a
-              href={job.jobUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View job posting"
-            >
-              <Button variant="outline" size="sm" className="gap-1.5">
+            {isGuest ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                onClick={() => setSampleJobDialogOpen(true)}
+                aria-label="View job posting"
+              >
                 <ExternalLink className="h-3.5 w-3.5" />
                 View Job
               </Button>
-            </a>
+            ) : (
+              <a
+                href={job.jobUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View job posting"
+              >
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  View Job
+                </Button>
+              </a>
+            )}
           </div>
         </CardHeader>
       </Card>
@@ -234,6 +249,23 @@ export default function JobMatchDetailClient({
       </Card>
 
       <LoginPromptDialog {...dialogProps} />
+      {isGuest && (
+        <LoginPromptDialog
+          open={sampleJobDialogOpen}
+          onOpenChange={setSampleJobDialogOpen}
+          icon={Sparkles}
+          title="This one's a sample listing"
+          description={
+            <>
+              This role at {job.company} is one of a few example jobs we use
+              to show how the analysis works, so there&apos;s no live posting
+              to open. Create a free account to paste in any real job and get the
+              same match score, strengths, and resume feedback for your own
+              profile.
+            </>
+          }
+        />
+      )}
 
       {/* Footer */}
       <p className="text-xs text-muted-foreground text-center">

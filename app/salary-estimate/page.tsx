@@ -173,7 +173,7 @@ export default async function SalaryEstimatePage() {
 
       {isGuest ? (
         <div className="space-y-6">
-          <DemoDataBanner feature="a sample salary estimate" />
+          <DemoDataBanner feature="a salary range for your skills, experience, and location" />
           <SalaryEstimateView
             estimate={DEMO_SALARY_ESTIMATE}
             username={DEMO_USERNAME}

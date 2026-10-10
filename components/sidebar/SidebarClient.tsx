@@ -10,6 +10,7 @@ import {
   TrendingUp,
   FileText,
   Sparkles,
+  Compass,
   Sun,
   Moon,
 } from "lucide-react";
@@ -20,9 +21,10 @@ import { useTheme } from "@/components/theme-provider";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { href: "/job-suggestions", label: "Job Suggestions", Icon: Compass },
   {
     href: "/job-specific-details",
-    label: "Job-Specific Details",
+    label: "Application Kit",
     Icon: Sparkles,
   },
   { href: "/jobs/add", label: "Analyse Job", Icon: BrainCircuit },

@@ -104,7 +104,7 @@ export default function GuestProfilePrompt() {
           href="/dashboard"
           className="text-foreground underline underline-offset-4 hover:text-primary"
         >
-          Keep exploring the sample data
+          Keep exploring the app
         </Link>{" "}
         — no account needed.
       </p>

@@ -54,7 +54,7 @@ export default async function JobSpecificDetailPage({
         </div>
       </div>
 
-      {isGuest && <DemoDataBanner feature="sample outreach content" />}
+      {isGuest && <DemoDataBanner feature="a tailored application kit for every job you apply to" />}
 
       <JobSpecificDetailsClient job={job} isGuest={isGuest} />
     </div>

@@ -18,20 +18,6 @@ export default function DashboardLoading() {
         </Button>
       </div>
 
-      {/* Stats Skeleton */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Card key={i}>
-            <CardHeader className="pb-2">
-              <Skeleton className="h-4 w-24" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-8 w-12" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
       {/* Job List Skeleton */}
       <div className="space-y-4">
         <Skeleton className="h-6 w-40" />

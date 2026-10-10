@@ -33,7 +33,7 @@ export default function JobListClient({
   const [query, setQuery] = useState(initialQuery);
   const [isLoading, setIsLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { prompt, guard, dialogProps } = useLoginPrompt(isGuest);
+  const { guard, dialogProps } = useLoginPrompt(isGuest);
 
   const fetchJobs = async (searchQuery: string, page: number) => {
     setIsLoading(true);
@@ -76,41 +76,30 @@ export default function JobListClient({
 
   const clearSearch = () => {
     setQuery("");
-    if (!guard("search your job matches")) return;
     fetchJobs("", 1);
   };
 
   return (
     <div className="space-y-4">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search by title, company, or location..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          readOnly={isGuest}
-          tabIndex={isGuest ? -1 : undefined}
-          className="pl-10 pr-10"
-        />
-        {/* Guests get a real button over the field: focusing the input itself
-            would re-open the dialog each time Radix restored focus to it. */}
-        {isGuest && (
-          <button
-            type="button"
-            aria-label="Search your job matches"
-            onClick={() => prompt("search your job matches")}
-            className="absolute inset-0 rounded-md cursor-pointer outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+      {!isGuest && (
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by title, company, or location..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="pl-10 pr-10"
           />
-        )}
-        {query && (
-          <button
-            onClick={clearSearch}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
-      </div>
+          {query && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      )}
 
       {jobs.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">

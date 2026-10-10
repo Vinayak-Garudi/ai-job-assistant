@@ -35,7 +35,7 @@ export default async function JobMatchDetailPage({
         </Button>
       </Link>
 
-      {isGuest && <DemoDataBanner feature="a sample job analysis" />}
+      {isGuest && <DemoDataBanner feature="a fit analysis like this for every job you apply to" />}
 
       <JobMatchDetailClient job={job} isGuest={isGuest} />
     </div>

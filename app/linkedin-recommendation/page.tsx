@@ -207,7 +207,7 @@ export default async function LinkedInRecommendationPage() {
 
       {isGuest ? (
         <div className="space-y-6">
-          <DemoDataBanner feature="a sample LinkedIn profile" />
+          <DemoDataBanner feature="a LinkedIn headline and About section written for how recruiters search" />
           <LinkedInProfileView
             profile={DEMO_LINKEDIN_PROFILE}
             username={DEMO_USERNAME}

@@ -25,15 +25,11 @@ async function DashboardData({ page, query }: { page: number; query: string }) {
   );
 }
 
+// Guests go straight to the list — stats and search are signed-in only.
 function DemoDashboardData() {
-  const { jobs, stats, pagination } = DEMO_JOB_MATCHES_RESULT;
+  const { jobs, pagination } = DEMO_JOB_MATCHES_RESULT;
 
-  return (
-    <>
-      <DashboardStats stats={stats} />
-      <JobListClient initialJobs={jobs} pagination={pagination} isGuest />
-    </>
-  );
+  return <JobListClient initialJobs={jobs} pagination={pagination} isGuest />;
 }
 
 function DashboardDataSkeleton() {
