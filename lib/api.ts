@@ -17,6 +17,8 @@ type ApiResponse = {
   items?: any;
   message: string;
   success: boolean;
+  /** Machine-readable error code from the backend, when provided */
+  errorCode?: string;
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
@@ -128,6 +130,7 @@ export async function apiRequest(
         data: null,
         message: errorMessage,
         success: false,
+        ...(errorData.errorCode && { errorCode: errorData.errorCode }),
       };
     }
 
